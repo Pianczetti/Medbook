@@ -1,0 +1,70 @@
+name: medbook
+display_name: 'MedBook - Platforma Medyczna'
+version: 1.0.0
+author:
+  name: MedBook
+  email: kontakt@medbook.pl
+  url: https://medbook.pl
+
+meta:
+  compatibility:
+    from: 9.0.0
+    to: ~
+  available_layouts:
+    - name: layout-full-width
+      description: 'Pelna szerokosc'
+    - name: layout-both-columns
+      description: 'Dwie kolumny boczne'
+  description: 'Profesjonalna platforma do rezerwacji wizyt lekarskich'
+
+assets:
+  use_parent_assets: false
+  css:
+    all:
+      - id: medbook-theme-css
+        path: assets/css/medbook.css
+        media: all
+        priority: 100
+  js:
+    all:
+      - id: medbook-theme-js
+        path: assets/js/medbook.js
+        priority: 100
+
+global_settings:
+  configuration:
+    PS_QUICK_VIEW: false
+    PS_GRID_PRODUCT: false
+  modules:
+    to_enable:
+      - medbook_booking
+    to_disable:
+      - ps_shoppingcart
+      - ps_searchbar
+
+hooks:
+  modules_to_hook:
+    displayHeader:
+      - medbook_booking
+    displayHome:
+      - medbook_booking
+    displayCustomerAccount:
+      - medbook_booking
+    displayFooter:
+      - medbook_booking
+
+layouts:
+  category:
+    default: layout-full-width
+  index:
+    default: layout-full-width
+  module-medbook_booking-booking:
+    default: layout-full-width
+  module-medbook_booking-doctorsearch:
+    default: layout-full-width
+  module-medbook_booking-doctorprofile:
+    default: layout-full-width
+  module-medbook_booking-dashboard:
+    default: layout-full-width
+  module-medbook_booking-bookingflow:
+    default: layout-full-width
