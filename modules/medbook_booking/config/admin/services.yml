@@ -1,0 +1,295 @@
+services:
+  # =========================================================================
+  # Resources Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\ResourceGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\ResourceQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.resources:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\ResourceQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_resource'
+
+  medbook_booking.grid.factory.resources:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\ResourceGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.resources'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Bookings Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\BookingGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\BookingQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.bookings:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\BookingQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_booking'
+
+  medbook_booking.grid.factory.bookings:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\BookingGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.bookings'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Schedules Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\ScheduleGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\ScheduleQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.schedules:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\ScheduleQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_schedule'
+
+  medbook_booking.grid.factory.schedules:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\ScheduleGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.schedules'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Blocked Dates Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\BlockedDateGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\BlockedDateQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.blocked_dates:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\BlockedDateQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_blocked_date'
+
+  medbook_booking.grid.factory.blocked_dates:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\BlockedDateGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.blocked_dates'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Settings Form Handler
+  # =========================================================================
+  MedBook\Booking\Form\SettingsDataProvider: ~
+
+  medbook_booking.form.settings_form_handler:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    public: true
+    arguments:
+      $formFactory: '@form.factory'
+      $hookDispatcher: '@prestashop.core.hook.dispatcher'
+      $formDataProvider: '@MedBook\Booking\Form\SettingsDataProvider'
+      $formType: 'MedBook\Booking\Form\SettingsType'
+      $hookName: 'MedbookBookingSettings'
+
+  # =========================================================================
+  # Price Rules Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\PriceRuleGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\PriceRuleQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.price_rules:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\PriceRuleQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_price_rule'
+
+  medbook_booking.grid.factory.price_rules:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\PriceRuleGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.price_rules'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Add-ons Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\AddonGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\AddonQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.addons:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\AddonQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_addon'
+
+  medbook_booking.grid.factory.addons:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\AddonGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.addons'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Refund Rules Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\RefundRuleGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\RefundRuleQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.refund_rules:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\RefundRuleQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_refund_rule'
+
+  medbook_booking.grid.factory.refund_rules:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\RefundRuleGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.refund_rules'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Deposit Rules Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\DepositRuleGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\DepositRuleQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.deposit_rules:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\DepositRuleQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_deposit_rule'
+
+  medbook_booking.grid.factory.deposit_rules:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\DepositRuleGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.deposit_rules'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Recurring Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\RecurringGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\RecurringQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.recurring:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\RecurringQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_recurring'
+
+  medbook_booking.grid.factory.recurring:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\RecurringGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.recurring'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'
+
+  # =========================================================================
+  # Waitlist Grid
+  # =========================================================================
+  MedBook\Booking\Grid\Definition\Factory\WaitlistGridDefinitionFactory:
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  MedBook\Booking\Grid\Query\WaitlistQueryBuilder:
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    autowire: true
+
+  medbook_booking.grid.data_provider.waitlist:
+    class: '%prestashop.core.grid.data.factory.doctrine_grid_data_factory%'
+    arguments:
+      - '@MedBook\Booking\Grid\Query\WaitlistQueryBuilder'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.core.grid.query.doctrine_query_parser'
+      - 'medbook_waitlist'
+
+  medbook_booking.grid.factory.waitlist:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    public: true
+    arguments:
+      - '@MedBook\Booking\Grid\Definition\Factory\WaitlistGridDefinitionFactory'
+      - '@medbook_booking.grid.data_provider.waitlist'
+      - '@prestashop.core.grid.filter.form_factory'
+      - '@prestashop.core.hook.dispatcher'

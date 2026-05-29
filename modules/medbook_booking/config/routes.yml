@@ -1,0 +1,521 @@
+# =============================================================================
+# Resources
+# =============================================================================
+admin_medbook_booking_resource_index:
+  path: /modules/medbook_booking/resources
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources'
+
+admin_medbook_booking_resource_search:
+  path: /modules/medbook_booking/resources
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:search'
+
+admin_medbook_booking_resource_create:
+  path: /modules/medbook_booking/resources/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::createAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:create'
+
+admin_medbook_booking_resource_edit:
+  path: /modules/medbook_booking/resources/{resourceId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::editAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:edit'
+  requirements:
+    resourceId: \d+
+
+admin_medbook_booking_resource_delete:
+  path: /modules/medbook_booking/resources/{resourceId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:delete'
+  requirements:
+    resourceId: \d+
+
+admin_medbook_booking_resource_toggle_active:
+  path: /modules/medbook_booking/resources/{resourceId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ResourceController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:toggleActive'
+  requirements:
+    resourceId: \d+
+
+# =============================================================================
+# Bookings
+# =============================================================================
+admin_medbook_booking_booking_index:
+  path: /modules/medbook_booking/bookings
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings'
+
+admin_medbook_booking_booking_search:
+  path: /modules/medbook_booking/bookings
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:search'
+
+admin_medbook_booking_booking_create:
+  path: /modules/medbook_booking/bookings/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::createAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:create'
+
+admin_medbook_booking_booking_edit:
+  path: /modules/medbook_booking/bookings/{bookingId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::editAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:edit'
+  requirements:
+    bookingId: \d+
+
+admin_medbook_booking_booking_delete:
+  path: /modules/medbook_booking/bookings/{bookingId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:delete'
+  requirements:
+    bookingId: \d+
+
+admin_medbook_booking_booking_update_status:
+  path: /modules/medbook_booking/bookings/{bookingId}/update-status
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::updateStatusAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:updateStatus'
+  requirements:
+    bookingId: \d+
+
+admin_medbook_booking_booking_bulk_delete:
+  path: /modules/medbook_booking/bookings/bulk-delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BookingController::bulkDeleteAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:bulkDelete'
+
+# =============================================================================
+# Schedules
+# =============================================================================
+admin_medbook_booking_schedule_index:
+  path: /modules/medbook_booking/schedules
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ScheduleController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingSchedules'
+    _legacy_link: 'AdminMedbookBookingSchedules'
+
+admin_medbook_booking_schedule_search:
+  path: /modules/medbook_booking/schedules
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ScheduleController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingSchedules'
+    _legacy_link: 'AdminMedbookBookingSchedules:search'
+
+admin_medbook_booking_schedule_create:
+  path: /modules/medbook_booking/schedules/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ScheduleController::createAction'
+    _legacy_controller: 'AdminMedbookBookingSchedules'
+    _legacy_link: 'AdminMedbookBookingSchedules:create'
+
+admin_medbook_booking_schedule_edit:
+  path: /modules/medbook_booking/schedules/{scheduleId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ScheduleController::editAction'
+    _legacy_controller: 'AdminMedbookBookingSchedules'
+    _legacy_link: 'AdminMedbookBookingSchedules:edit'
+  requirements:
+    scheduleId: \d+
+
+admin_medbook_booking_schedule_delete:
+  path: /modules/medbook_booking/schedules/{scheduleId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ScheduleController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingSchedules'
+    _legacy_link: 'AdminMedbookBookingSchedules:delete'
+  requirements:
+    scheduleId: \d+
+
+# =============================================================================
+# Blocked Dates
+# =============================================================================
+admin_medbook_booking_blocked_date_index:
+  path: /modules/medbook_booking/blocked-dates
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BlockedDateController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:blockedDates'
+
+admin_medbook_booking_blocked_date_search:
+  path: /modules/medbook_booking/blocked-dates
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BlockedDateController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:blockedDatesSearch'
+
+admin_medbook_booking_blocked_date_create:
+  path: /modules/medbook_booking/blocked-dates/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BlockedDateController::createAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:blockedDateCreate'
+
+admin_medbook_booking_blocked_date_delete:
+  path: /modules/medbook_booking/blocked-dates/{blockedDateId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\BlockedDateController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingResources'
+    _legacy_link: 'AdminMedbookBookingResources:blockedDateDelete'
+  requirements:
+    blockedDateId: \d+
+
+# =============================================================================
+# Settings
+# =============================================================================
+admin_medbook_booking_settings:
+  path: /modules/medbook_booking/settings
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SettingsController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingSettings'
+    _legacy_link: 'AdminMedbookBookingSettings'
+
+# =============================================================================
+# Price Rules
+# =============================================================================
+admin_medbook_booking_price_rule_index:
+  path: /modules/medbook_booking/price-rules
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules'
+
+admin_medbook_booking_price_rule_search:
+  path: /modules/medbook_booking/price-rules
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules:search'
+
+admin_medbook_booking_price_rule_create:
+  path: /modules/medbook_booking/price-rules/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::createAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules:create'
+
+admin_medbook_booking_price_rule_edit:
+  path: /modules/medbook_booking/price-rules/{priceRuleId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::editAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules:edit'
+  requirements:
+    priceRuleId: \d+
+
+admin_medbook_booking_price_rule_delete:
+  path: /modules/medbook_booking/price-rules/{priceRuleId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules:delete'
+  requirements:
+    priceRuleId: \d+
+
+admin_medbook_booking_price_rule_toggle_active:
+  path: /modules/medbook_booking/price-rules/{priceRuleId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PriceRuleController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingPriceRules'
+    _legacy_link: 'AdminMedbookBookingPriceRules:toggleActive'
+  requirements:
+    priceRuleId: \d+
+
+# =============================================================================
+# Add-ons
+# =============================================================================
+admin_medbook_booking_addon_index:
+  path: /modules/medbook_booking/addons
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons'
+
+admin_medbook_booking_addon_search:
+  path: /modules/medbook_booking/addons
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons:search'
+
+admin_medbook_booking_addon_create:
+  path: /modules/medbook_booking/addons/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::createAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons:create'
+
+admin_medbook_booking_addon_edit:
+  path: /modules/medbook_booking/addons/{addonId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::editAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons:edit'
+  requirements:
+    addonId: \d+
+
+admin_medbook_booking_addon_delete:
+  path: /modules/medbook_booking/addons/{addonId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons:delete'
+  requirements:
+    addonId: \d+
+
+admin_medbook_booking_addon_toggle_active:
+  path: /modules/medbook_booking/addons/{addonId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\AddonController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingAddons'
+    _legacy_link: 'AdminMedbookBookingAddons:toggleActive'
+  requirements:
+    addonId: \d+
+
+# =============================================================================
+# Refund Rules
+# =============================================================================
+admin_medbook_booking_refund_rule_index:
+  path: /modules/medbook_booking/refund-rules
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RefundRuleController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingRefundRules'
+    _legacy_link: 'AdminMedbookBookingRefundRules'
+
+admin_medbook_booking_refund_rule_search:
+  path: /modules/medbook_booking/refund-rules
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RefundRuleController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingRefundRules'
+    _legacy_link: 'AdminMedbookBookingRefundRules:search'
+
+admin_medbook_booking_refund_rule_create:
+  path: /modules/medbook_booking/refund-rules/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RefundRuleController::createAction'
+    _legacy_controller: 'AdminMedbookBookingRefundRules'
+    _legacy_link: 'AdminMedbookBookingRefundRules:create'
+
+admin_medbook_booking_refund_rule_edit:
+  path: /modules/medbook_booking/refund-rules/{refundRuleId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RefundRuleController::editAction'
+    _legacy_controller: 'AdminMedbookBookingRefundRules'
+    _legacy_link: 'AdminMedbookBookingRefundRules:edit'
+  requirements:
+    refundRuleId: \d+
+
+admin_medbook_booking_refund_rule_delete:
+  path: /modules/medbook_booking/refund-rules/{refundRuleId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RefundRuleController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingRefundRules'
+    _legacy_link: 'AdminMedbookBookingRefundRules:delete'
+  requirements:
+    refundRuleId: \d+
+
+# =============================================================================
+# Deposit Rules
+# =============================================================================
+admin_medbook_booking_deposit_rule_index:
+  path: /modules/medbook_booking/deposit-rules
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules'
+
+admin_medbook_booking_deposit_rule_search:
+  path: /modules/medbook_booking/deposit-rules
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules:search'
+
+admin_medbook_booking_deposit_rule_create:
+  path: /modules/medbook_booking/deposit-rules/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::createAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules:create'
+
+admin_medbook_booking_deposit_rule_edit:
+  path: /modules/medbook_booking/deposit-rules/{depositRuleId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::editAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules:edit'
+  requirements:
+    depositRuleId: \d+
+
+admin_medbook_booking_deposit_rule_delete:
+  path: /modules/medbook_booking/deposit-rules/{depositRuleId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules:delete'
+  requirements:
+    depositRuleId: \d+
+
+admin_medbook_booking_deposit_rule_toggle_active:
+  path: /modules/medbook_booking/deposit-rules/{depositRuleId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DepositRuleController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingDepositRules'
+    _legacy_link: 'AdminMedbookBookingDepositRules:toggleActive'
+  requirements:
+    depositRuleId: \d+
+
+# =============================================================================
+# Calendar
+# =============================================================================
+admin_medbook_booking_calendar:
+  path: /modules/medbook_booking/calendar
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\CalendarController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingCalendar'
+    _legacy_link: 'AdminMedbookBookingCalendar'
+
+admin_medbook_booking_calendar_data:
+  path: /modules/medbook_booking/calendar/data
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\CalendarController::dataAction'
+    _legacy_controller: 'AdminMedbookBookingCalendar'
+    _legacy_link: 'AdminMedbookBookingCalendar:data'
+
+# =============================================================================
+# Recurring
+# =============================================================================
+admin_medbook_booking_recurring_index:
+  path: /modules/medbook_booking/recurring
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RecurringController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingRecurring'
+    _legacy_link: 'AdminMedbookBookingRecurring'
+
+admin_medbook_booking_recurring_search:
+  path: /modules/medbook_booking/recurring
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RecurringController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingRecurring'
+    _legacy_link: 'AdminMedbookBookingRecurring:search'
+
+admin_medbook_booking_recurring_dismiss:
+  path: /modules/medbook_booking/recurring/{suggestedVisitId}/dismiss
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\RecurringController::dismissAction'
+    _legacy_controller: 'AdminMedbookBookingRecurring'
+    _legacy_link: 'AdminMedbookBookingRecurring:dismiss'
+  requirements:
+    suggestedVisitId: \d+
+
+# =============================================================================
+# Waitlist
+# =============================================================================
+admin_medbook_booking_waitlist_index:
+  path: /modules/medbook_booking/waitlist
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\WaitlistController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingWaitlist'
+    _legacy_link: 'AdminMedbookBookingWaitlist'
+
+admin_medbook_booking_waitlist_search:
+  path: /modules/medbook_booking/waitlist
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\WaitlistController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingWaitlist'
+    _legacy_link: 'AdminMedbookBookingWaitlist:search'
+
+admin_medbook_booking_waitlist_assign:
+  path: /modules/medbook_booking/waitlist/{waitlistId}/assign
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\WaitlistController::assignAction'
+    _legacy_controller: 'AdminMedbookBookingWaitlist'
+    _legacy_link: 'AdminMedbookBookingWaitlist:assign'
+  requirements:
+    waitlistId: \d+
+
+admin_medbook_booking_waitlist_remove:
+  path: /modules/medbook_booking/waitlist/{waitlistId}/remove
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\WaitlistController::removeAction'
+    _legacy_controller: 'AdminMedbookBookingWaitlist'
+    _legacy_link: 'AdminMedbookBookingWaitlist:remove'
+  requirements:
+    waitlistId: \d+

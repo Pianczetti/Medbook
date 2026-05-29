@@ -1,0 +1,18 @@
+Booking Reminder
+================
+
+Hello {customer_name},
+
+This is a friendly reminder about your upcoming booking:
+
+Resource: {resource_name}
+Date: {booking_date}
+Time: {booking_time}
+
+Please confirm or cancel your booking using the links below:
+
+Confirm your booking: {confirm_url}
+Cancel your booking: {cancel_url}
+
+---
+This is an automated message. Please do not reply directly to this email.

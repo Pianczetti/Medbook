@@ -1,0 +1,41 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Add medical domain extensions to the medbook_booking module: Doctor Profile, Clinic, Specialization entities with full SQL schema, Entity classes, admin controllers, grid definitions, form types, and routes. Add visit_type (stacjonarna/online) and insurance_type (NFZ/prywatne) fields to bookings. All in Polish.",
+  "status": "pending",
+  "steps": [
+    "Create additional SQL in modules/medbook_booking/sql/install.sql for new medical tables: PREFIX_medbook_doctor_profile (id_doctor_profile, id_resource FK, specialization_id, education TEXT, experience_years INT, languages VARCHAR, certifications TEXT, photo VARCHAR, nip VARCHAR(10), pwz_number VARCHAR(7), consultation_online TINYINT, consultation_inperson TINYINT, date_add, date_upd), PREFIX_medbook_clinic (id_clinic, name VARCHAR(255), address VARCHAR(255), city VARCHAR(128), postal_code VARCHAR(6), voivodeship VARCHAR(64), lat DECIMAL(10,8), lng DECIMAL(11,8), phone VARCHAR(32), email VARCHAR(128), opening_hours_json TEXT, is_active TINYINT, date_add, date_upd), PREFIX_medbook_doctor_clinic (id_doctor_clinic, id_resource INT, id_clinic INT, room_number VARCHAR(32), is_primary TINYINT, PRIMARY KEY, INDEX), PREFIX_medbook_specialization (id_specialization, name VARCHAR(128), slug VARCHAR(128), icon VARCHAR(64), is_active TINYINT, position INT), PREFIX_medbook_document (id_document, id_customer INT, id_booking INT, document_type ENUM prescription/referral/result/other, filename VARCHAR(255), original_name VARCHAR(255), mime_type VARCHAR(64), file_size INT, uploaded_by ENUM patient/doctor/admin, date_add DATETIME)",
+    "Add visit_type ENUM('stacjonarna','online') DEFAULT 'stacjonarna' and insurance_type ENUM('NFZ','prywatne','pakiet') DEFAULT 'prywatne' and video_call_url VARCHAR(512) DEFAULT NULL columns to PREFIX_medbook_booking table in install.sql",
+    "Create Entity classes: modules/medbook_booking/src/Entity/DoctorProfile.php, Clinic.php, DoctorClinic.php, Specialization.php, Document.php - using ObjectModel pattern matching existing Resource.php entity",
+    "Create admin Grid definitions: modules/medbook_booking/src/Grid/Definition/Factory/DoctorProfileGridDefinitionFactory.php, ClinicGridDefinitionFactory.php, SpecializationGridDefinitionFactory.php, DocumentGridDefinitionFactory.php",
+    "Create admin Grid query builders: modules/medbook_booking/src/Grid/Query/DoctorProfileQueryBuilder.php, ClinicQueryBuilder.php, SpecializationQueryBuilder.php, DocumentQueryBuilder.php",
+    "Create Form types: modules/medbook_booking/src/Form/DoctorProfileType.php, ClinicType.php, SpecializationType.php - with Polish labels (Specjalizacja, Wyksztalcenie, Lata doswiadczenia, Jezyki, Certyfikaty, Numer NIP, Numer PWZ, Adres, Miasto, Kod pocztowy, Wojewodztwo, Telefon, Email, Godziny otwarcia)",
+    "Create Admin controllers: modules/medbook_booking/src/Controller/Admin/DoctorProfileController.php (index, create, edit, delete actions), ClinicController.php, SpecializationController.php, DocumentController.php - following existing ResourceController pattern",
+    "Add routes for new controllers to config/routes.yml: admin_medbook_booking_doctor_profile_* (index, search, create, edit, delete), admin_medbook_booking_clinic_* (index, search, create, edit, delete), admin_medbook_booking_specialization_* (index, search, create, edit, delete, toggle_active)",
+    "Register new services in config/admin/services.yml: grid definitions, query builders, data providers, grid factories for DoctorProfile, Clinic, Specialization, Document grids",
+    "Register new controllers in config/services.yml with proper DI arguments",
+    "Update the main module class getTabs() to add new admin tabs: AdminMedbookBookingDoctors (Lekarze), AdminMedbookBookingClinics (Przychodnie), AdminMedbookBookingSpecializations (Specjalizacje), AdminMedbookBookingDocuments (Dokumenty)",
+    "Create Twig templates for new admin pages: views/templates/admin/doctor_profile/ (index.html.twig, create.html.twig, edit.html.twig), views/templates/admin/clinic/ (index.html.twig, create.html.twig, edit.html.twig), views/templates/admin/specialization/ (index.html.twig, create.html.twig, edit.html.twig)",
+    "Add default Polish specializations data as a fixture method in the module install(): Kardiologia, Dermatologia, Endokrynologia, Gastroenterologia, Ginekologia, Neurologia, Okulistyka, Ortopedia, Pediatria, Psychiatria, Pulmonologia, Radiologia, Reumatologia, Urologia, Stomatologia, Laryngologia, Alergologia, Onkologia, Medycyna rodzinna, Chirurgia ogolna",
+    "Update the BookingType form to include visit_type (Typ wizyty) and insurance_type (Ubezpieczenie) select fields",
+    "Update sql/uninstall.sql to drop all new tables"
+  ],
+  "acceptance_criteria": [
+    "All new Entity classes pass PHP syntax check",
+    "All new Grid definition, query builder, controller, and form type classes pass PHP syntax check",
+    "New SQL tables are defined in install.sql with proper foreign key relationships",
+    "Routes file has all new admin_medbook_booking_doctor_profile_*, admin_medbook_booking_clinic_*, admin_medbook_booking_specialization_* routes",
+    "Services YAML files properly register all new grid factories and controllers",
+    "Module getTabs() returns entries for Lekarze, Przychodnie, Specjalizacje, Dokumenty",
+    "visit_type and insurance_type columns exist in the booking table SQL",
+    "All admin labels are in Polish"
+  ],
+  "verification": [
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/src/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors' to verify no PHP syntax errors",
+    "Run: grep -c 'id_specialization\\|id_clinic\\|id_doctor_profile\\|id_document' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql to confirm new tables exist",
+    "Run: grep 'visit_type\\|insurance_type' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql to confirm new booking columns",
+    "Run: grep -c 'admin_medbook_booking_doctor_profile\\|admin_medbook_booking_clinic\\|admin_medbook_booking_specialization' /projects/sandbox/PrestaShop/modules/medbook_booking/config/routes.yml to count new routes"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

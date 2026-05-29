@@ -1,0 +1,17 @@
+A Spot Is Now Available!
+========================
+
+Hello {customer_name},
+
+Great news! A spot has become available for:
+
+Resource: {resource_name}
+Date: {available_date}
+Time: {available_time}
+
+Book now before someone else takes the spot!
+
+Book here: {booking_url}
+
+---
+You are receiving this because you joined the waitlist. This is an automated message.

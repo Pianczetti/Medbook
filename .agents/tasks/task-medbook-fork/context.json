@@ -1,0 +1,22 @@
+{
+  "project_type": "PHP Symfony-based e-commerce platform (PrestaShop 9) being forked into a medical booking platform",
+  "language": "PHP 8.1+",
+  "build_system": "Composer for PHP deps, npm/webpack for frontend assets, Docker for full environment. Module system uses config/services.yml and config/routes.yml for DI and routing.",
+  "test_framework": "PHPUnit for unit/integration tests, Behat for behavior tests, Playwright for UI. Config at tests/Unit/phpunit.xml, tests/Integration/phpunit.xml",
+  "build_command": "composer install --no-interaction (PHP deps only, no DB needed for syntax validation)",
+  "test_command": "php -d date.timezone=UTC ./vendor/phpunit/phpunit/phpunit -c tests/Unit/phpunit.xml (unit tests only - integration tests need DB)",
+  "verification_instructions": "1. Run composer install to verify autoloading. 2. Run php -l on new/modified PHP files. 3. Run phpstan if feasible. 4. Verify module structure matches PS9 module conventions.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "1. cd /projects/sandbox/PrestaShop. 2. composer install --no-interaction. 3. Module lives in modules/medbook_booking/",
+  "environment_constraints": "OPEN_INTERNET network mode - can install composer dependencies. PHP 8.4 available (mise). No MySQL database available for runtime - cannot run integration tests or install PrestaShop. Validation limited to syntax checks, autoloading, and static analysis.",
+  "contribution_requirements": "OSL-3.0 license for core files, AFL-3.0 for module files. declare(strict_types=1) in all PHP files. Final classes by default. All typed parameters and return types.",
+  "key_patterns": "PS9 modules use: config/services.yml for DI, config/routes.yml for admin routes, src/ for namespaced PHP (Controllers, Entities, Services, Grid, Form), views/templates/admin/ for Twig admin templates, views/templates/front/ for Smarty front templates, controllers/front/ for legacy front controllers, sql/install.sql for DB schema. Grid system uses GridDefinitionFactory + QueryBuilder + GridFactory triplet. Module main class defines hooks and tabs.",
+  "relevant_files": [
+    "modules/medbook_booking/ (to be created - entire module)",
+    "/projects/sandbox/sellnetictheme/modules/sellnetic_booking/ (reference source module)",
+    "install-dev/classes/datas.php (installer data loading)",
+    "install-dev/fixtures/ (default data for fresh installs)",
+    "composer.json (autoloading and dependencies)"
+  ],
+  "directory_structure": "PrestaShop root: src/ (Core domain + Bundle), classes/ (legacy), modules/ (installable modules), themes/ (front-office themes with _core shared), admin-dev/ (back-office), install-dev/ (installer), app/ (Symfony kernel configs), config/ (framework config). Module internal: config/ (services.yml, routes.yml), src/ (Entity, Controller, Service, Grid, Form, Command, Repository), controllers/front/ (legacy front controllers), views/templates/ (admin twig + front smarty), sql/ (install/uninstall SQL), mails/ (email templates)"
+}

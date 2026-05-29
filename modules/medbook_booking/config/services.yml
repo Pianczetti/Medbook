@@ -1,0 +1,83 @@
+imports:
+  - { resource: 'admin/services.yml' }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  MedBook\Booking\:
+    resource: '../src/*'
+    exclude: '../src/{Entity,DTO}'
+
+  MedBook\Booking\Service\SlotCalculator:
+    public: false
+
+  MedBook\Booking\Service\BookingFrontProvider:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+      $slotCalculator: '@MedBook\Booking\Service\SlotCalculator'
+    public: true
+
+  MedBook\Booking\Service\PricingService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\RefundService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\CartIntegrationService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+      $pricingService: '@MedBook\Booking\Service\PricingService'
+    public: true
+
+  MedBook\Booking\Service\ReminderService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\RecurrenceService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\WaitlistService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\SmsNotificationService:
+    alias: 'MedBook\Booking\Service\NullSmsProvider'
+
+  MedBook\Booking\Service\NullSmsProvider:
+    public: false
+
+  MedBook\Booking\Service\BookingStatusService:
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+      $hookDispatcher: '@prestashop.core.hook.dispatcher'
+    public: true
+
+  MedBook\Booking\Controller\Admin\CalendarController:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    tags: ['controller.service_arguments']
+
+  MedBook\Booking\Controller\Admin\WaitlistController:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    tags: ['controller.service_arguments']

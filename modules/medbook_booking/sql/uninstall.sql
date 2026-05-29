@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS `PREFIX_medbook_waitlist`;
+DROP TABLE IF EXISTS `PREFIX_medbook_suggested_visit`;
+DROP TABLE IF EXISTS `PREFIX_medbook_recurrence_config`;
+DROP TABLE IF EXISTS `PREFIX_medbook_reminder`;
+DROP TABLE IF EXISTS `PREFIX_medbook_confirm_token`;
+DROP TABLE IF EXISTS `PREFIX_medbook_cart_data`;
+DROP TABLE IF EXISTS `PREFIX_medbook_refund_rule`;
+DROP TABLE IF EXISTS `PREFIX_medbook_booking_addon`;
+DROP TABLE IF EXISTS `PREFIX_medbook_addon_lang`;
+DROP TABLE IF EXISTS `PREFIX_medbook_addon`;
+DROP TABLE IF EXISTS `PREFIX_medbook_deposit_rule`;
+DROP TABLE IF EXISTS `PREFIX_medbook_price_rule`;
+DROP TABLE IF EXISTS `PREFIX_medbook_blocked_date`;
+DROP TABLE IF EXISTS `PREFIX_medbook_booking`;
+DROP TABLE IF EXISTS `PREFIX_medbook_schedule`;
+DROP TABLE IF EXISTS `PREFIX_medbook_resource_lang`;
+DROP TABLE IF EXISTS `PREFIX_medbook_resource`;

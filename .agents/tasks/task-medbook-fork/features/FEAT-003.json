@@ -1,0 +1,30 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Integrate the medbook_booking module into PrestaShop's installer so it is preinstalled on fresh installations. Add MedBook branding, Polish language default, and doctor-oriented default configuration. Modify install-dev/ to set up the module automatically.",
+  "status": "pending",
+  "steps": [
+    "Create install fixture file modules/medbook_booking/install/fixtures.php that inserts default specializations (20 Polish medical specializations), a sample clinic (Przychodnia MedBook, ul. Przykladowa 1, 00-001 Warszawa), and default module configuration values (MEDBOOK_DEFAULT_DURATION=30, MEDBOOK_DEFAULT_RESOURCE_TYPE=doctor, MEDBOOK_REMINDER_HOURS=24, MEDBOOK_BOOKING_CONFIRMATION=email, MEDBOOK_ALLOW_ONLINE_VISITS=1, MEDBOOK_INSURANCE_TYPES=NFZ,prywatne,pakiet)",
+    "Add a medbook_install_modules() function in the module's install() method that: registers all hooks, installs all tabs, executes install.sql, runs the fixtures",
+    "Create /projects/sandbox/PrestaShop/install-dev/fixtures/medbook/ directory with: specializations.xml (Polish medical specializations data for installer), clinics.xml (sample clinic), doctors.xml (sample doctor with profile)",
+    "Modify /projects/sandbox/PrestaShop/install-dev/classes/datas.php to add a step that installs the medbook_booking module after core modules are installed. Look at how existing modules are auto-installed in the installer flow and follow the same pattern.",
+    "Update the module's install() to set Configuration values: PS_SHOP_NAME='MedBook', MEDBOOK_DEFAULT_RESOURCE_TYPE='doctor', MEDBOOK_PLATFORM_MODE='medical'",
+    "Create install-dev/langs/pl/data/ directory with Polish translations for default MedBook entities if not already present",
+    "Add an upgrade SQL file modules/medbook_booking/sql/upgrade-1.0.0.sql as placeholder for future schema changes"
+  ],
+  "acceptance_criteria": [
+    "Fixture file exists and contains valid PHP that inserts default specializations",
+    "install-dev/fixtures/medbook/ directory exists with XML data files",
+    "install-dev/classes/datas.php has been modified to reference medbook_booking module installation",
+    "Module install() method sets up all required Configuration values",
+    "All PHP files pass syntax check"
+  ],
+  "verification": [
+    "Run: php -l /projects/sandbox/PrestaShop/modules/medbook_booking/medbook_booking.php to verify main module file syntax",
+    "Run: php -l /projects/sandbox/PrestaShop/install-dev/classes/datas.php to verify installer modification syntax",
+    "Run: test -d /projects/sandbox/PrestaShop/install-dev/fixtures/medbook && echo 'OK' to verify fixtures directory exists",
+    "Run: grep 'medbook' /projects/sandbox/PrestaShop/install-dev/classes/datas.php to confirm module is referenced in installer"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

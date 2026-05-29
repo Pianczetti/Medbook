@@ -1,0 +1,43 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "Create the MedBook front-office theme based on PrestaShop 9 theme structure (themes/_core pattern). Includes: doctor search page, doctor profile page, patient dashboard (upcoming appointments, history), simplified booking flow, and all UI in Polish. The theme transforms the shopping experience into a medical booking UX.",
+  "status": "pending",
+  "steps": [
+    "Create theme directory structure: /projects/sandbox/PrestaShop/themes/medbook/ with subdirectories: assets/, config/, templates/, templates/catalog/, templates/customer/, templates/checkout/, templates/cms/, templates/_partials/, modules/medbook_booking/views/templates/front/",
+    "Create themes/medbook/config/theme.yml with theme metadata: name=medbook, display_name='MedBook - Platforma Medyczna', version=1.0.0, author=MedBook, meta.description='Profesjonalna platforma do rezerwacji wizyt lekarskich', assets configuration, and hook registration",
+    "Create themes/medbook/preview.png placeholder (1x1 PNG or reference existing)",
+    "Create the main layout template: themes/medbook/templates/layouts/layout-both-columns.tpl and layout-full-width.tpl with Polish navigation (Strona glowna, Lekarze, Specjalizacje, Moje wizyty, Kontakt), medical-themed header with trust elements",
+    "Create doctor search/listing page: themes/medbook/templates/catalog/listing/doctor-search.tpl - search by specialization (dropdown), city/location (text), availability (date picker), display results as cards with doctor photo, name, specialization, rating, nearest available slot, price",
+    "Create doctor profile page: themes/medbook/templates/catalog/doctor-profile.tpl - doctor bio, photo, specializations, education, certifications, PWZ number, clinic locations, reviews summary, available slots calendar widget (week view), booking CTA button",
+    "Create patient dashboard: themes/medbook/templates/customer/medbook-dashboard.tpl - sections: Nadchodzace wizyty (upcoming), Historia wizyt (history with status badges), Ulubieni lekarze (favorites), Dokumenty (documents list)",
+    "Create booking flow templates: themes/medbook/templates/checkout/booking-step1-specialization.tpl (Wybierz specjalizacje), booking-step2-doctor.tpl (Wybierz lekarza), booking-step3-datetime.tpl (Wybierz termin), booking-step4-confirm.tpl (Potwierdzenie rezerwacji)",
+    "Create themes/medbook/templates/_partials/header.tpl with MedBook logo area, patient account dropdown, mobile-responsive navigation in Polish",
+    "Create themes/medbook/templates/_partials/footer.tpl with clinic info, quick links (O nas, Regulamin, Polityka prywatnosci, RODO, Kontakt), working hours display",
+    "Create themes/medbook/templates/_partials/doctor-card.tpl - reusable component for doctor listing cards",
+    "Create themes/medbook/templates/_partials/slot-picker.tpl - reusable calendar/time slot selection widget",
+    "Create themes/medbook/assets/css/medbook.css - medical theme styles: clean whites/blues, trust colors, professional typography, card-based layouts, responsive design. Color scheme: primary #2563EB (blue), secondary #059669 (green/health), neutral grays, white backgrounds",
+    "Create themes/medbook/assets/js/medbook.js - slot picker interactivity, AJAX doctor search, booking flow navigation",
+    "Create front controller overrides in modules/medbook_booking/controllers/front/: doctorsearch.php (handles search queries and filtering), doctorprofile.php (loads doctor data with profile, clinics, slots), dashboard.php (patient dashboard data), bookingflow.php (multi-step booking process)",
+    "Register new front routes in the module for: medbook-lekarze (doctor search), medbook-lekarz/{slug} (doctor profile), medbook-panel (patient dashboard), medbook-rezerwacja (booking flow)",
+    "Add Polish text for all template strings: Szukaj lekarza, Specjalizacja, Miasto, Dostepnosc, Umow wizyte, Najblizszy termin, Ocena, Doswiadczenie, Wyksztalcenie, Certyfikaty, Numer PWZ, Lokalizacje, Opinie pacjentow, Wybierz termin, Typ wizyty: Stacjonarna/Online, Ubezpieczenie: NFZ/Prywatne/Pakiet, Potwierdz rezerwacje, Anuluj wizyte, Twoje wizyty"
+  ],
+  "acceptance_criteria": [
+    "Theme directory exists at themes/medbook/ with proper structure (config/theme.yml, templates/, assets/)",
+    "theme.yml is valid YAML with all required PrestaShop 9 theme configuration keys",
+    "All .tpl template files use valid Smarty syntax",
+    "Doctor search, doctor profile, patient dashboard, and booking flow templates exist",
+    "CSS file provides a medical-themed design system",
+    "All front controllers pass PHP syntax check",
+    "All visible text in templates is in Polish",
+    "templates/_partials/ contains reusable doctor-card and slot-picker components"
+  ],
+  "verification": [
+    "Run: find /projects/sandbox/PrestaShop/themes/medbook/ -name '*.tpl' | wc -l to confirm multiple templates exist (should be 12+)",
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/controllers/front/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors' to verify controller syntax",
+    "Run: test -f /projects/sandbox/PrestaShop/themes/medbook/config/theme.yml && echo 'OK' to verify theme config exists",
+    "Run: grep -c 'Specjalizacja\\|Lekarz\\|Wizyta\\|Rezerwacja' /projects/sandbox/PrestaShop/themes/medbook/templates/catalog/listing/doctor-search.tpl to verify Polish text"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

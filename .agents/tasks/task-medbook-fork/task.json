@@ -1,0 +1,7 @@
+{
+  "task_id": "task-medbook-fork",
+  "task_description": "Transform PrestaShop 9 fork into MedBook - a dedicated Polish medical appointment booking platform. Copy and rebrand the sellnetic_booking module, add medical domain extensions (doctor profiles, clinics, specializations), integrate into the PS9 installer, create a medical-themed front-office, and add medical features (e-prescriptions, RODO, documents, online visits).",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004", "FEAT-005"],
+  "blocked_reason": null
+}

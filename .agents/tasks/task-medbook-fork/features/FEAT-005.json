@@ -1,0 +1,44 @@
+{
+  "id": "FEAT-005",
+  "type": "feat",
+  "description": "Add medical-specific features: e-prescription PDF generation, RODO/consent management, patient-doctor document exchange, visit type support (stacjonarna/online with video call link), and email templates in Polish. Also add the MedBook README and branding to the repository root.",
+  "status": "pending",
+  "steps": [
+    "Create prescription PDF service: modules/medbook_booking/src/Service/PrescriptionService.php - generates Polish e-prescription PDF using TCPDF (already in composer deps). Fields: patient name, PESEL placeholder, doctor name+PWZ, prescription date, medications list (nazwa leku, dawkowanie, ilosc, refundacja), clinic stamp, doctor signature area. PDF formatted per Polish prescription standards.",
+    "Create prescription controller: modules/medbook_booking/src/Controller/Admin/PrescriptionController.php - actions: createAction (form to fill prescription for a booking), generatePdfAction (generates and downloads PDF), listAction (shows prescriptions for a booking)",
+    "Create prescription form type: modules/medbook_booking/src/Form/PrescriptionType.php with fields: patient_name, medications (collection of MedicationType with: name, dosage, quantity, refunded), notes, diagnosis_code (ICD-10)",
+    "Create RODO consent management: modules/medbook_booking/src/Service/ConsentService.php - manages patient consents for data processing. Methods: recordConsent(), hasConsent(), revokeConsent(), getConsentHistory(), generateDataExport(). Store in new table PREFIX_medbook_consent (id_consent, id_customer, consent_type ENUM medical_data/marketing/third_party, granted_at, revoked_at, ip_address, version)",
+    "Add consent SQL to install.sql: PREFIX_medbook_consent table, PREFIX_medbook_data_retention (id_retention, entity_type, retention_days, is_active, date_add)",
+    "Create consent front controller: modules/medbook_booking/controllers/front/consent.php - displays consent form during first booking, allows managing consents from patient dashboard. Template: views/templates/front/consent.tpl with Polish text (Zgoda na przetwarzanie danych medycznych, Zgoda na komunikacje marketingowa, Prawo do bycia zapomnianym, Eksport danych)",
+    "Create document upload service: modules/medbook_booking/src/Service/DocumentService.php - handles file upload/download for medical documents (prescriptions, referrals, test results). Methods: upload(), download(), listForBooking(), listForPatient(), delete(). Validates file types (PDF, JPG, PNG), max size 10MB.",
+    "Create document front controller: modules/medbook_booking/controllers/front/documents.php - patient can view/download their documents. Template: views/templates/front/documents.tpl (Moje dokumenty, Recepty, Skierowania, Wyniki badan, Pobierz, Data dodania)",
+    "Create email templates in Polish: modules/medbook_booking/mails/pl/ - booking_confirmation.html (Potwierdzenie rezerwacji wizyty), booking_reminder.html (Przypomnienie o wizycie - 24h before), booking_cancelled.html (Wizyta anulowana), prescription_ready.html (Recepta gotowa do odbioru), waitlist_notification.html (Dostepny termin z listy oczekujacych). Each with proper HTML email structure, MedBook branding, and Polish content.",
+    "Create online visit support: add video_call_url generation logic in modules/medbook_booking/src/Service/OnlineVisitService.php - generates unique meeting room URL on booking confirmation for online visits, sends link in confirmation email",
+    "Update the module main class to register hooks for email sending: actionBookingConfirmed, actionBookingReminder, actionBookingCancelled - wire to send appropriate email templates",
+    "Add prescription routes to config/routes.yml: admin_medbook_booking_prescription_create, admin_medbook_booking_prescription_generate_pdf, admin_medbook_booking_prescription_list",
+    "Register all new services in config/services.yml: PrescriptionService, ConsentService, DocumentService, OnlineVisitService",
+    "Create /projects/sandbox/PrestaShop/MEDBOOK.md - README describing the MedBook fork: what it is (polska platforma do rezerwacji wizyt lekarskich oparta na PrestaShop 9), features list, installation instructions, configuration guide, all in Polish",
+    "Update /projects/sandbox/PrestaShop/README.md header area to add MedBook branding paragraph at the top explaining this is a medical booking fork"
+  ],
+  "acceptance_criteria": [
+    "PrescriptionService.php exists and has generatePdf() method that uses TCPDF",
+    "ConsentService.php exists with recordConsent(), hasConsent(), revokeConsent() methods",
+    "DocumentService.php exists with upload(), download(), listForBooking() methods",
+    "OnlineVisitService.php exists with generateMeetingUrl() method",
+    "Email templates exist in modules/medbook_booking/mails/pl/ (at least 5 templates)",
+    "All PHP files pass syntax check",
+    "PREFIX_medbook_consent table is defined in install.sql",
+    "Prescription admin routes exist in routes.yml",
+    "MEDBOOK.md exists at repository root with Polish content",
+    "All email and consent text is in Polish"
+  ],
+  "verification": [
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/src/Service/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors'",
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/mails/pl/ -name '*.html' | wc -l to confirm email templates exist (should be 5+)",
+    "Run: grep 'medbook_consent' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql to confirm consent table",
+    "Run: grep 'prescription' /projects/sandbox/PrestaShop/modules/medbook_booking/config/routes.yml to confirm prescription routes",
+    "Run: test -f /projects/sandbox/PrestaShop/MEDBOOK.md && echo 'OK'"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
