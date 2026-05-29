@@ -170,6 +170,7 @@ class Medbook_booking extends Module implements WidgetInterface
             }
         }
 
+        // Core booking configuration
         Configuration::updateValue('MEDBOOK_BOOKING_CONFIRM_MODE', 'auto');
         Configuration::updateValue('MEDBOOK_BOOKING_MAX_DAYS_AHEAD', 30);
         Configuration::updateValue('MEDBOOK_BOOKING_MIN_HOURS_ADVANCE', 2);
@@ -182,47 +183,33 @@ class Medbook_booking extends Module implements WidgetInterface
         Configuration::updateValue('MEDBOOK_BOOKING_REMINDER_HOURS_BEFORE', 24);
         Configuration::updateValue('MEDBOOK_BOOKING_WAITLIST_NOTIFICATION_HOURS', 4);
 
-        $this->installDefaultSpecializations();
+        // MedBook platform configuration
+        Configuration::updateValue('PS_SHOP_NAME', 'MedBook');
+        Configuration::updateValue('MEDBOOK_DEFAULT_RESOURCE_TYPE', 'doctor');
+        Configuration::updateValue('MEDBOOK_PLATFORM_MODE', 'medical');
+        Configuration::updateValue('MEDBOOK_DEFAULT_DURATION', 30);
+        Configuration::updateValue('MEDBOOK_REMINDER_HOURS', 24);
+        Configuration::updateValue('MEDBOOK_BOOKING_CONFIRMATION', 'email');
+        Configuration::updateValue('MEDBOOK_ALLOW_ONLINE_VISITS', 1);
+        Configuration::updateValue('MEDBOOK_INSURANCE_TYPES', 'NFZ,prywatne,pakiet');
+
+        // Install default fixtures (specializations, sample clinic)
+        $this->installMedbookFixtures();
 
         return true;
     }
 
-    private function installDefaultSpecializations(): void
+    /**
+     * Load and execute the fixture installer for default MedBook data.
+     */
+    private function installMedbookFixtures(): void
     {
-        $specializations = [
-            ['name' => 'Kardiologia', 'slug' => 'kardiologia'],
-            ['name' => 'Dermatologia', 'slug' => 'dermatologia'],
-            ['name' => 'Endokrynologia', 'slug' => 'endokrynologia'],
-            ['name' => 'Gastroenterologia', 'slug' => 'gastroenterologia'],
-            ['name' => 'Ginekologia', 'slug' => 'ginekologia'],
-            ['name' => 'Neurologia', 'slug' => 'neurologia'],
-            ['name' => 'Okulistyka', 'slug' => 'okulistyka'],
-            ['name' => 'Ortopedia', 'slug' => 'ortopedia'],
-            ['name' => 'Pediatria', 'slug' => 'pediatria'],
-            ['name' => 'Psychiatria', 'slug' => 'psychiatria'],
-            ['name' => 'Pulmonologia', 'slug' => 'pulmonologia'],
-            ['name' => 'Radiologia', 'slug' => 'radiologia'],
-            ['name' => 'Reumatologia', 'slug' => 'reumatologia'],
-            ['name' => 'Urologia', 'slug' => 'urologia'],
-            ['name' => 'Stomatologia', 'slug' => 'stomatologia'],
-            ['name' => 'Laryngologia', 'slug' => 'laryngologia'],
-            ['name' => 'Alergologia', 'slug' => 'alergologia'],
-            ['name' => 'Onkologia', 'slug' => 'onkologia'],
-            ['name' => 'Medycyna rodzinna', 'slug' => 'medycyna-rodzinna'],
-            ['name' => 'Chirurgia ogolna', 'slug' => 'chirurgia-ogolna'],
-        ];
-
-        $db = \Db::getInstance();
-        $position = 0;
-
-        foreach ($specializations as $spec) {
-            $db->insert(_DB_PREFIX_ . 'medbook_specialization', [
-                'name' => pSQL($spec['name']),
-                'slug' => pSQL($spec['slug']),
-                'icon' => null,
-                'is_active' => 1,
-                'position' => $position++,
-            ]);
+        $fixturesFile = __DIR__ . '/install/fixtures.php';
+        if (file_exists($fixturesFile)) {
+            require_once $fixturesFile;
+            if (function_exists('medbook_install_fixtures')) {
+                medbook_install_fixtures();
+            }
         }
     }
 
@@ -246,6 +233,13 @@ class Medbook_booking extends Module implements WidgetInterface
         Configuration::deleteByName('MEDBOOK_BOOKING_SHOW_PRICES');
         Configuration::deleteByName('MEDBOOK_BOOKING_REMINDER_HOURS_BEFORE');
         Configuration::deleteByName('MEDBOOK_BOOKING_WAITLIST_NOTIFICATION_HOURS');
+        Configuration::deleteByName('MEDBOOK_DEFAULT_RESOURCE_TYPE');
+        Configuration::deleteByName('MEDBOOK_PLATFORM_MODE');
+        Configuration::deleteByName('MEDBOOK_DEFAULT_DURATION');
+        Configuration::deleteByName('MEDBOOK_REMINDER_HOURS');
+        Configuration::deleteByName('MEDBOOK_BOOKING_CONFIRMATION');
+        Configuration::deleteByName('MEDBOOK_ALLOW_ONLINE_VISITS');
+        Configuration::deleteByName('MEDBOOK_INSURANCE_TYPES');
 
         return parent::uninstall();
     }
