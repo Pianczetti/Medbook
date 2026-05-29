@@ -2,7 +2,7 @@
   "id": "FEAT-006",
   "type": "fix",
   "description": "Address code review issues: fix schema mismatch in front controllers, complete uninstall.sql, fix CSRF bypass, add path traversal protection, encrypt PESEL, add double-booking prevention, gate PS_SHOP_NAME overwrite, fix consent export response handling.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Fix schema mismatch in bookingflow.php, dashboard.php, doctorprofile.php, doctorsearch.php to use actual tables (medbook_resource, medbook_resource_lang, medbook_doctor_profile, medbook_specialization, medbook_clinic, medbook_doctor_clinic)",
     "Complete uninstall.sql to DROP all tables created by install.sql",
@@ -31,5 +31,5 @@
     "Run: grep -c 'DROP TABLE' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/uninstall.sql should be 24+"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 8 review issues addressed. Front controllers rewritten to use medbook_resource + medbook_resource_lang + medbook_doctor_profile + medbook_specialization + medbook_clinic + medbook_doctor_clinic with correct column names. uninstall.sql now drops all 25 tables. CSRF always required (no bypass for empty tokens). Path traversal blocked via realpath + str_starts_with boundary check. PESEL encrypted at rest with AES-256-CBC, decrypted on read, pesel column widened to VARCHAR(255). Double-booking prevented by UNIQUE KEY on (id_resource, booking_date, time_start, time_end). PS_SHOP_NAME only set when current value is default. Consent export uses ob_end_clean + die(). All PHP files pass syntax checks. Used git add -f for module files due to .gitignore pattern."
 }
