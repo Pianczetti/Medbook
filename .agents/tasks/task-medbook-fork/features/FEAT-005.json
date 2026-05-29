@@ -2,7 +2,7 @@
   "id": "FEAT-005",
   "type": "feat",
   "description": "Add medical-specific features: e-prescription PDF generation, RODO/consent management, patient-doctor document exchange, visit type support (stacjonarna/online with video call link), and email templates in Polish. Also add the MedBook README and branding to the repository root.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create prescription PDF service: modules/medbook_booking/src/Service/PrescriptionService.php - generates Polish e-prescription PDF using TCPDF (already in composer deps). Fields: patient name, PESEL placeholder, doctor name+PWZ, prescription date, medications list (nazwa leku, dawkowanie, ilosc, refundacja), clinic stamp, doctor signature area. PDF formatted per Polish prescription standards.",
     "Create prescription controller: modules/medbook_booking/src/Controller/Admin/PrescriptionController.php - actions: createAction (form to fill prescription for a booking), generatePdfAction (generates and downloads PDF), listAction (shows prescriptions for a booking)",
@@ -40,5 +40,5 @@
     "Run: test -f /projects/sandbox/PrestaShop/MEDBOOK.md && echo 'OK'"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All PHP files pass syntax check. modules/* pattern in .gitignore requires -f flag when adding new module files. TCPDF import relies on composer autoload (tecnickcom/tcpdf package already in composer.json). Used bin2hex(random_bytes()) for secure token generation in OnlineVisitService and DocumentService."
 }
