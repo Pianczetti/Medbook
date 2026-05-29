@@ -44,6 +44,7 @@ class Medbook_bookingConsentModuleFrontController extends ModuleFrontController
             'consents' => $consents,
             'consent_history' => $consentHistory,
             'consent_action_url' => $this->context->link->getModuleLink('medbook_booking', 'consent'),
+            'consent_token' => Tools::getToken(false),
         ]);
 
         $this->setTemplate('module:medbook_booking/views/templates/front/consent.tpl');
@@ -51,6 +52,12 @@ class Medbook_bookingConsentModuleFrontController extends ModuleFrontController
 
     private function handleGrant(\MedBook\Booking\Service\ConsentService $consentService, int $customerId): void
     {
+        if (!$this->isValidPostRequest()) {
+            $this->errors[] = 'Nieprawidlowe zadanie. Sprobuj ponownie.';
+
+            return;
+        }
+
         $consentType = Tools::getValue('consent_type', '');
         $allowedTypes = ['medical_data', 'marketing', 'third_party'];
 
@@ -63,6 +70,12 @@ class Medbook_bookingConsentModuleFrontController extends ModuleFrontController
 
     private function handleRevoke(\MedBook\Booking\Service\ConsentService $consentService, int $customerId): void
     {
+        if (!$this->isValidPostRequest()) {
+            $this->errors[] = 'Nieprawidlowe zadanie. Sprobuj ponownie.';
+
+            return;
+        }
+
         $consentType = Tools::getValue('consent_type', '');
         $allowedTypes = ['medical_data', 'marketing', 'third_party'];
 
@@ -70,6 +83,20 @@ class Medbook_bookingConsentModuleFrontController extends ModuleFrontController
             $consentService->revokeConsent($customerId, $consentType);
             $this->success[] = 'Zgoda zostala wycofana.';
         }
+    }
+
+    /**
+     * Validate that the request is POST and contains a valid CSRF token.
+     */
+    private function isValidPostRequest(): bool
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return false;
+        }
+
+        $token = Tools::getValue('token');
+
+        return !empty($token) && $token === Tools::getToken(false);
     }
 
     private function handleExport(\MedBook\Booking\Service\ConsentService $consentService, int $customerId): void

@@ -18,6 +18,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="revoke">
                 <input type="hidden" name="consent_type" value="medical_data">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-outline-danger btn-sm mt-2">Wycofaj zgode</button>
             </form>
         {else}
@@ -25,6 +26,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="grant">
                 <input type="hidden" name="consent_type" value="medical_data">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-primary btn-sm mt-2">Udziel zgody</button>
             </form>
         {/if}
@@ -38,6 +40,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="revoke">
                 <input type="hidden" name="consent_type" value="marketing">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-outline-danger btn-sm mt-2">Wycofaj zgode</button>
             </form>
         {else}
@@ -45,6 +48,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="grant">
                 <input type="hidden" name="consent_type" value="marketing">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-primary btn-sm mt-2">Udziel zgody</button>
             </form>
         {/if}
@@ -58,6 +62,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="revoke">
                 <input type="hidden" name="consent_type" value="third_party">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-outline-danger btn-sm mt-2">Wycofaj zgode</button>
             </form>
         {else}
@@ -65,6 +70,7 @@
             <form method="post" action="{$consent_action_url}">
                 <input type="hidden" name="action" value="grant">
                 <input type="hidden" name="consent_type" value="third_party">
+                <input type="hidden" name="token" value="{$consent_token}">
                 <button type="submit" class="btn btn-primary btn-sm mt-2">Udziel zgody</button>
             </form>
         {/if}

@@ -67,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_booking` (
     `confirmed_at` DATETIME DEFAULT NULL,
     PRIMARY KEY (`id_booking`),
     UNIQUE KEY `uniq_medbook_reference` (`reference_code`),
-    UNIQUE KEY `uniq_medbook_booking_slot` (`id_resource`, `booking_date`, `time_start`, `time_end`),
     INDEX `idx_medbook_resource_date` (`id_resource`, `booking_date`),
     INDEX `idx_medbook_status` (`status`),
     INDEX `idx_medbook_customer` (`id_customer`)

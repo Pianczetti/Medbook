@@ -89,11 +89,9 @@ final class DocumentService
         }
 
         $filePath = $this->uploadDir . '/' . $customerId . '/' . $document['filename'];
-        $realPath = realpath($filePath);
-        $allowedBase = realpath($this->uploadDir);
+        $realPath = $this->resolveSecurePath($filePath);
 
-        // Validate resolved path stays within the upload directory to prevent path traversal
-        if ($realPath === false || $allowedBase === false || !str_starts_with($realPath, $allowedBase . DIRECTORY_SEPARATOR)) {
+        if ($realPath === null) {
             return null;
         }
 
@@ -162,8 +160,10 @@ final class DocumentService
         }
 
         $filePath = $this->uploadDir . '/' . $customerId . '/' . $document['filename'];
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        $realPath = $this->resolveSecurePath($filePath);
+
+        if ($realPath !== null && file_exists($realPath)) {
+            unlink($realPath);
         }
 
         $this->connection->delete($this->dbPrefix . 'medbook_document', [
@@ -172,6 +172,22 @@ final class DocumentService
         ]);
 
         return true;
+    }
+
+    /**
+     * Resolve a file path and validate it stays within the upload directory.
+     * Returns the resolved real path or null if the path is invalid or escapes the allowed base.
+     */
+    private function resolveSecurePath(string $filePath): ?string
+    {
+        $realPath = realpath($filePath);
+        $allowedBase = realpath($this->uploadDir);
+
+        if ($realPath === false || $allowedBase === false || !str_starts_with($realPath, $allowedBase . DIRECTORY_SEPARATOR)) {
+            return null;
+        }
+
+        return $realPath;
     }
 
     /**

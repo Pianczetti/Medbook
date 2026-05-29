@@ -162,7 +162,8 @@ class BookingFrontProvider
 
     /**
      * Create a booking with auto-generated reference code.
-     * Uses a transaction to prevent race conditions on slot availability.
+     * Uses SELECT ... FOR UPDATE to lock the resource row during slot validation,
+     * preventing race conditions while still allowing rebooking of cancelled slots.
      *
      * @return array{success: bool, reference_code?: string, error?: string}
      */
@@ -184,7 +185,13 @@ class BookingFrontProvider
         $this->connection->beginTransaction();
 
         try {
-            // Verify slot is still available within the transaction
+            // Lock the resource row to serialize concurrent booking attempts
+            $this->connection->executeQuery(
+                'SELECT id_resource FROM ' . $this->dbPrefix . 'medbook_resource WHERE id_resource = :id FOR UPDATE',
+                ['id' => $resourceId]
+            );
+
+            // Verify slot is still available (only non-cancelled bookings block the slot)
             $availableSlots = $this->getAvailableSlots($resourceId, $date, 0);
             if (!in_array($timeStart, $availableSlots, true)) {
                 $this->connection->rollBack();
@@ -219,10 +226,6 @@ class BookingFrontProvider
             $this->connection->commit();
 
             return ['success' => true, 'reference_code' => $referenceCode];
-        } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
-            $this->connection->rollBack();
-
-            return ['success' => false, 'error' => 'Selected time slot is no longer available.'];
         } catch (\Throwable $e) {
             $this->connection->rollBack();
 
