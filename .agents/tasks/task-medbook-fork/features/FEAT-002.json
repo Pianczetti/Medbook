@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Add medical domain extensions to the medbook_booking module: Doctor Profile, Clinic, Specialization entities with full SQL schema, Entity classes, admin controllers, grid definitions, form types, and routes. Add visit_type (stacjonarna/online) and insurance_type (NFZ/prywatne) fields to bookings. All in Polish.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create additional SQL in modules/medbook_booking/sql/install.sql for new medical tables: PREFIX_medbook_doctor_profile (id_doctor_profile, id_resource FK, specialization_id, education TEXT, experience_years INT, languages VARCHAR, certifications TEXT, photo VARCHAR, nip VARCHAR(10), pwz_number VARCHAR(7), consultation_online TINYINT, consultation_inperson TINYINT, date_add, date_upd), PREFIX_medbook_clinic (id_clinic, name VARCHAR(255), address VARCHAR(255), city VARCHAR(128), postal_code VARCHAR(6), voivodeship VARCHAR(64), lat DECIMAL(10,8), lng DECIMAL(11,8), phone VARCHAR(32), email VARCHAR(128), opening_hours_json TEXT, is_active TINYINT, date_add, date_upd), PREFIX_medbook_doctor_clinic (id_doctor_clinic, id_resource INT, id_clinic INT, room_number VARCHAR(32), is_primary TINYINT, PRIMARY KEY, INDEX), PREFIX_medbook_specialization (id_specialization, name VARCHAR(128), slug VARCHAR(128), icon VARCHAR(64), is_active TINYINT, position INT), PREFIX_medbook_document (id_document, id_customer INT, id_booking INT, document_type ENUM prescription/referral/result/other, filename VARCHAR(255), original_name VARCHAR(255), mime_type VARCHAR(64), file_size INT, uploaded_by ENUM patient/doctor/admin, date_add DATETIME)",
     "Add visit_type ENUM('stacjonarna','online') DEFAULT 'stacjonarna' and insurance_type ENUM('NFZ','prywatne','pakiet') DEFAULT 'prywatne' and video_call_url VARCHAR(512) DEFAULT NULL columns to PREFIX_medbook_booking table in install.sql",
@@ -37,5 +37,5 @@
     "Run: grep -c 'admin_medbook_booking_doctor_profile\\|admin_medbook_booking_clinic\\|admin_medbook_booking_specialization' /projects/sandbox/PrestaShop/modules/medbook_booking/config/routes.yml to count new routes"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All new files needed git add -f due to modules/* gitignore pattern. All PHP files pass syntax checks. 41 files changed, 3102 insertions. Medical domain entities use Doctrine ORM attributes pattern matching existing Resource entity. Grid system follows the standard GridDefinitionFactory + QueryBuilder + GridFactory triplet. Controllers follow same pattern as ResourceController."
 }
