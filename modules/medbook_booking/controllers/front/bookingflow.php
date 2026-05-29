@@ -35,7 +35,7 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
 
     private function stepSpecialization(int $langId): void
     {
-        $specializations = $this->getSpecializations($langId);
+        $specializations = $this->getSpecializations();
 
         $this->context->smarty->assign([
             'specializations' => $specializations,
@@ -48,11 +48,11 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
     private function stepDoctor(int $langId): void
     {
         $specializationId = (int) Tools::getValue('specialization_id', 0);
-        $visitType = (string) Tools::getValue('visit_type', 'stationary');
+        $visitType = (string) Tools::getValue('visit_type', 'stacjonarna');
         $insuranceType = (string) Tools::getValue('insurance_type', '');
 
         $doctors = $this->getDoctorsBySpecialization($specializationId, $langId);
-        $specializationName = $this->getSpecializationName($specializationId, $langId);
+        $specializationName = $this->getSpecializationName($specializationId);
 
         $this->context->smarty->assign([
             'doctors' => $doctors,
@@ -67,19 +67,19 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
 
     private function stepDatetime(int $langId): void
     {
-        $doctorId = (int) Tools::getValue('doctor_id', 0);
+        $doctorProfileId = (int) Tools::getValue('doctor_id', 0);
         $specializationId = (int) Tools::getValue('specialization_id', 0);
-        $visitType = (string) Tools::getValue('visit_type', 'stationary');
+        $visitType = (string) Tools::getValue('visit_type', 'stacjonarna');
         $insuranceType = (string) Tools::getValue('insurance_type', '');
 
-        $doctorName = $this->getDoctorName($doctorId);
-        $resourceId = $this->getDoctorResourceId($doctorId);
+        $doctorName = $this->getDoctorName($doctorProfileId, $langId);
+        $resourceId = $this->getDoctorResourceId($doctorProfileId);
 
         $today = new \DateTime();
         $calendarDays = $this->buildCalendarDays($today);
 
         $this->context->smarty->assign([
-            'selected_doctor_id' => $doctorId,
+            'selected_doctor_id' => $doctorProfileId,
             'selected_doctor_name' => $doctorName,
             'selected_specialization' => $specializationId,
             'selected_visit_type' => $visitType,
@@ -102,19 +102,19 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
             return;
         }
 
-        $doctorId = (int) Tools::getValue('doctor_id', 0);
+        $doctorProfileId = (int) Tools::getValue('doctor_id', 0);
         $specializationId = (int) Tools::getValue('specialization_id', 0);
         $date = (string) Tools::getValue('booking_date', '');
         $time = (string) Tools::getValue('time_start', '');
-        $visitType = (string) Tools::getValue('visit_type', 'stationary');
+        $visitType = (string) Tools::getValue('visit_type', 'stacjonarna');
         $insuranceType = (string) Tools::getValue('insurance_type', '');
 
-        $doctorName = $this->getDoctorName($doctorId);
-        $specializationName = $this->getSpecializationName($specializationId, $langId);
-        $resourceId = $this->getDoctorResourceId($doctorId);
+        $doctorName = $this->getDoctorName($doctorProfileId, $langId);
+        $specializationName = $this->getSpecializationName($specializationId);
+        $resourceId = $this->getDoctorResourceId($doctorProfileId);
 
         $this->context->smarty->assign([
-            'selected_doctor_id' => $doctorId,
+            'selected_doctor_id' => $doctorProfileId,
             'selected_doctor_name' => $doctorName,
             'selected_specialization' => $specializationId,
             'selected_specialization_name' => $specializationName,
@@ -175,15 +175,12 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getSpecializations(int $langId): array
+    private function getSpecializations(): array
     {
-        $sql = 'SELECT s.`id_medbook_specialization` as `id`, sl.`name`
+        $sql = 'SELECT s.`id_specialization` as `id`, s.`name`
                 FROM `' . _DB_PREFIX_ . 'medbook_specialization` s
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization_lang` sl
-                    ON s.`id_medbook_specialization` = sl.`id_medbook_specialization`
-                    AND sl.`id_lang` = ' . $langId . '
-                WHERE s.`active` = 1
-                ORDER BY sl.`name` ASC';
+                WHERE s.`is_active` = 1
+                ORDER BY s.`name` ASC';
 
         $result = \Db::getInstance()->executeS($sql);
 
@@ -195,25 +192,28 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
      */
     private function getDoctorsBySpecialization(int $specializationId, int $langId): array
     {
-        $where = 'd.`active` = 1';
-        $join = '';
+        $where = ['r.`is_active` = 1', 'r.`resource_type` = \'doctor\''];
 
         if ($specializationId > 0) {
-            $join = ' INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor_specialization` ds
-                      ON d.`id_medbook_doctor` = ds.`id_medbook_doctor`
-                      AND ds.`id_medbook_specialization` = ' . $specializationId;
+            $where[] = 'dp.`id_specialization` = ' . $specializationId;
         }
 
-        $sql = 'SELECT d.`id_medbook_doctor` as `id`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `name`,
-                       d.`photo_url`,
-                       d.`rating`,
-                       d.`reviews_count`,
-                       d.`consultation_price` as `price`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor` d
-                ' . $join . '
-                WHERE ' . $where . '
-                ORDER BY d.`rating` DESC
+        $sql = 'SELECT dp.`id_doctor_profile` as `id`,
+                       rl.`name`,
+                       dp.`photo`,
+                       dp.`experience_years`,
+                       r.`base_price` as `price`,
+                       r.`id_resource` as `resource_id`,
+                       s.`name` as `specialization_name`
+                FROM `' . _DB_PREFIX_ . 'medbook_resource` r
+                INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor_profile` dp
+                    ON dp.`id_resource` = r.`id_resource`
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = r.`id_resource` AND rl.`id_lang` = ' . $langId . '
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization` s
+                    ON s.`id_specialization` = dp.`id_specialization`
+                WHERE ' . implode(' AND ', $where) . '
+                ORDER BY rl.`name` ASC
                 LIMIT 50';
 
         $results = \Db::getInstance()->executeS($sql);
@@ -228,7 +228,7 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
                 'doctorprofile',
                 ['id' => (int) $doctor['id']]
             );
-            $doctor['specialization'] = '';
+            $doctor['specialization'] = $doctor['specialization_name'] ?? '';
             $doctor['next_slot'] = '';
             $doctor['city'] = '';
         }
@@ -236,46 +236,47 @@ class Medbook_bookingBookingflowModuleFrontController extends ModuleFrontControl
         return $results;
     }
 
-    private function getDoctorName(int $doctorId): string
+    private function getDoctorName(int $doctorProfileId, int $langId): string
     {
-        if ($doctorId <= 0) {
+        if ($doctorProfileId <= 0) {
             return '';
         }
 
-        $sql = 'SELECT CONCAT(`title`, \' \', `firstname`, \' \', `lastname`)
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor`
-                WHERE `id_medbook_doctor` = ' . $doctorId;
+        $sql = 'SELECT rl.`name`
+                FROM `' . _DB_PREFIX_ . 'medbook_doctor_profile` dp
+                INNER JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = dp.`id_resource` AND rl.`id_lang` = ' . $langId . '
+                WHERE dp.`id_doctor_profile` = ' . $doctorProfileId;
 
         $result = \Db::getInstance()->getValue($sql);
 
         return is_string($result) ? $result : '';
     }
 
-    private function getSpecializationName(int $specializationId, int $langId): string
+    private function getSpecializationName(int $specializationId): string
     {
         if ($specializationId <= 0) {
             return '';
         }
 
         $sql = 'SELECT `name`
-                FROM `' . _DB_PREFIX_ . 'medbook_specialization_lang`
-                WHERE `id_medbook_specialization` = ' . $specializationId . '
-                  AND `id_lang` = ' . $langId;
+                FROM `' . _DB_PREFIX_ . 'medbook_specialization`
+                WHERE `id_specialization` = ' . $specializationId;
 
         $result = \Db::getInstance()->getValue($sql);
 
         return is_string($result) ? $result : '';
     }
 
-    private function getDoctorResourceId(int $doctorId): int
+    private function getDoctorResourceId(int $doctorProfileId): int
     {
-        if ($doctorId <= 0) {
+        if ($doctorProfileId <= 0) {
             return 0;
         }
 
-        $sql = 'SELECT `id_medbook_resource`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor`
-                WHERE `id_medbook_doctor` = ' . $doctorId;
+        $sql = 'SELECT `id_resource`
+                FROM `' . _DB_PREFIX_ . 'medbook_doctor_profile`
+                WHERE `id_doctor_profile` = ' . $doctorProfileId;
 
         $result = \Db::getInstance()->getValue($sql);
 

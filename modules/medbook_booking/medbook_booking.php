@@ -185,8 +185,11 @@ class Medbook_booking extends Module implements WidgetInterface
         Configuration::updateValue('MEDBOOK_BOOKING_REMINDER_HOURS_BEFORE', 24);
         Configuration::updateValue('MEDBOOK_BOOKING_WAITLIST_NOTIFICATION_HOURS', 4);
 
-        // MedBook platform configuration
-        Configuration::updateValue('PS_SHOP_NAME', 'MedBook');
+        // MedBook platform configuration - only set shop name on fresh installs
+        $currentShopName = Configuration::get('PS_SHOP_NAME');
+        if (empty($currentShopName) || $currentShopName === 'PrestaShop') {
+            Configuration::updateValue('PS_SHOP_NAME', 'MedBook');
+        }
         Configuration::updateValue('MEDBOOK_DEFAULT_RESOURCE_TYPE', 'doctor');
         Configuration::updateValue('MEDBOOK_PLATFORM_MODE', 'medical');
         Configuration::updateValue('MEDBOOK_DEFAULT_DURATION', 30);

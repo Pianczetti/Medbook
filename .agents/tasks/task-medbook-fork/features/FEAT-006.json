@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-006",
+  "type": "fix",
+  "description": "Address code review issues: fix schema mismatch in front controllers, complete uninstall.sql, fix CSRF bypass, add path traversal protection, encrypt PESEL, add double-booking prevention, gate PS_SHOP_NAME overwrite, fix consent export response handling.",
+  "status": "in_progress",
+  "steps": [
+    "Fix schema mismatch in bookingflow.php, dashboard.php, doctorprofile.php, doctorsearch.php to use actual tables (medbook_resource, medbook_resource_lang, medbook_doctor_profile, medbook_specialization, medbook_clinic, medbook_doctor_clinic)",
+    "Complete uninstall.sql to DROP all tables created by install.sql",
+    "Fix CSRF bypass in cartbooking.php - always require token validation",
+    "Add path traversal protection in DocumentService::download()",
+    "Add PESEL encryption in PrescriptionService using openssl",
+    "Add UNIQUE index on (id_resource, booking_date, time_start, time_end) in install.sql",
+    "Gate PS_SHOP_NAME overwrite to only run on fresh install",
+    "Fix consent controller export to use ob_end_clean + die() pattern"
+  ],
+  "acceptance_criteria": [
+    "All front controllers query existing tables with correct column names",
+    "uninstall.sql drops all 24+ tables from install.sql",
+    "CSRF token is always required in cartbooking.php",
+    "DocumentService validates resolved path stays within upload directory",
+    "PESEL is encrypted before storage and decrypted on retrieval",
+    "install.sql has unique constraint preventing double-bookings",
+    "PS_SHOP_NAME is only set if current value is default or empty",
+    "Consent export uses ob_end_clean + die() pattern",
+    "All PHP files pass syntax check"
+  ],
+  "verification": [
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors'",
+    "Run: grep -c 'medbook_doctor\\b' /projects/sandbox/PrestaShop/modules/medbook_booking/controllers/front/bookingflow.php should be 0",
+    "Run: grep 'UNIQUE' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql | grep -c 'booking_date'",
+    "Run: grep -c 'DROP TABLE' /projects/sandbox/PrestaShop/modules/medbook_booking/sql/uninstall.sql should be 24+"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

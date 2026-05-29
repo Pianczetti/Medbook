@@ -24,16 +24,13 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
         // Load history
         $historyAppointments = $this->loadHistoryAppointments($customerId, $langId);
 
-        // Load favorite doctors
-        $favoriteDoctors = $this->loadFavoriteDoctors($customerId, $langId);
-
         // Load documents
         $documents = $this->loadDocuments($customerId);
 
         $this->context->smarty->assign([
             'upcoming_appointments' => $upcomingAppointments,
             'history_appointments' => $historyAppointments,
-            'favorite_doctors' => $favoriteDoctors,
+            'favorite_doctors' => [],
             'documents' => $documents,
         ]);
 
@@ -45,16 +42,22 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
      */
     private function loadUpcomingAppointments(int $customerId, int $langId): array
     {
-        $sql = 'SELECT b.`id_medbook_booking`,
+        $sql = 'SELECT b.`id_booking`,
                        b.`booking_date`,
                        b.`time_start`,
+                       b.`time_end`,
                        b.`status`,
                        b.`visit_type`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `doctor_name`,
+                       b.`reference_code`,
+                       rl.`name` as `doctor_name`,
                        c.`name` as `clinic_name`
                 FROM `' . _DB_PREFIX_ . 'medbook_booking` b
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_doctor` d ON b.`id_medbook_doctor` = d.`id_medbook_doctor`
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_clinic` c ON b.`id_medbook_clinic` = c.`id_medbook_clinic`
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = b.`id_resource` AND rl.`id_lang` = ' . $langId . '
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_doctor_clinic` dc
+                    ON dc.`id_resource` = b.`id_resource` AND dc.`is_primary` = 1
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_clinic` c
+                    ON c.`id_clinic` = dc.`id_clinic`
                 WHERE b.`id_customer` = ' . $customerId . '
                   AND b.`booking_date` >= CURDATE()
                   AND b.`status` IN (\'confirmed\', \'pending\')
@@ -73,7 +76,6 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
             $appointment['month'] = $this->getPolishMonth((int) $date->format('n'));
             $appointment['time'] = $appointment['time_start'];
             $appointment['specialization'] = '';
-            $appointment['visit_type'] = $appointment['visit_type'] ?? 'stationary';
         }
 
         return $results;
@@ -84,13 +86,15 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
      */
     private function loadHistoryAppointments(int $customerId, int $langId): array
     {
-        $sql = 'SELECT b.`id_medbook_booking`,
+        $sql = 'SELECT b.`id_booking`,
                        b.`booking_date`,
                        b.`time_start`,
                        b.`status`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `doctor_name`
+                       b.`reference_code`,
+                       rl.`name` as `doctor_name`
                 FROM `' . _DB_PREFIX_ . 'medbook_booking` b
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_doctor` d ON b.`id_medbook_doctor` = d.`id_medbook_doctor`
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = b.`id_resource` AND rl.`id_lang` = ' . $langId . '
                 WHERE b.`id_customer` = ' . $customerId . '
                   AND (b.`booking_date` < CURDATE() OR b.`status` IN (\'completed\', \'cancelled\'))
                 ORDER BY b.`booking_date` DESC
@@ -116,49 +120,13 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function loadFavoriteDoctors(int $customerId, int $langId): array
-    {
-        $sql = 'SELECT d.`id_medbook_doctor` as `id`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `name`,
-                       d.`photo_url`,
-                       d.`rating`,
-                       d.`reviews_count`,
-                       d.`consultation_price` as `price`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor_favorite` f
-                INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor` d ON f.`id_medbook_doctor` = d.`id_medbook_doctor`
-                WHERE f.`id_customer` = ' . $customerId . '
-                ORDER BY f.`date_add` DESC';
-
-        $results = \Db::getInstance()->executeS($sql);
-
-        if (!is_array($results)) {
-            return [];
-        }
-
-        foreach ($results as &$doctor) {
-            $doctor['profile_url'] = $this->context->link->getModuleLink(
-                'medbook_booking',
-                'doctorprofile',
-                ['id' => (int) $doctor['id']]
-            );
-            $doctor['specialization'] = '';
-            $doctor['next_slot'] = '';
-            $doctor['city'] = '';
-        }
-
-        return $results;
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     private function loadDocuments(int $customerId): array
     {
-        $sql = 'SELECT doc.`id_medbook_document`,
-                       doc.`name`,
-                       doc.`type`,
+        $sql = 'SELECT doc.`id_document`,
+                       doc.`original_name` as `name`,
+                       doc.`document_type` as `type`,
                        doc.`date_add` as `date`,
-                       doc.`file_path`
+                       doc.`mime_type`
                 FROM `' . _DB_PREFIX_ . 'medbook_document` doc
                 WHERE doc.`id_customer` = ' . $customerId . '
                 ORDER BY doc.`date_add` DESC
@@ -173,8 +141,8 @@ class Medbook_bookingDashboardModuleFrontController extends ModuleFrontControlle
         foreach ($results as &$doc) {
             $doc['download_url'] = $this->context->link->getModuleLink(
                 'medbook_booking',
-                'dashboard',
-                ['action' => 'download', 'id' => (int) $doc['id_medbook_document']]
+                'documents',
+                ['action' => 'download', 'id' => (int) $doc['id_document']]
             );
         }
 

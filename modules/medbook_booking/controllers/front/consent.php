@@ -77,9 +77,14 @@ class Medbook_bookingConsentModuleFrontController extends ModuleFrontController
         $exportData = $consentService->generateDataExport($customerId);
         $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         header('Content-Type: application/json');
         header('Content-Disposition: attachment; filename="moje_dane_medbook.json"');
+        header('Content-Length: ' . strlen((string) $json));
         echo $json;
-        exit;
+        die();
     }
 }

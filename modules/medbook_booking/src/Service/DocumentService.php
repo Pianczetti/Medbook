@@ -89,12 +89,20 @@ final class DocumentService
         }
 
         $filePath = $this->uploadDir . '/' . $customerId . '/' . $document['filename'];
-        if (!file_exists($filePath)) {
+        $realPath = realpath($filePath);
+        $allowedBase = realpath($this->uploadDir);
+
+        // Validate resolved path stays within the upload directory to prevent path traversal
+        if ($realPath === false || $allowedBase === false || !str_starts_with($realPath, $allowedBase . DIRECTORY_SEPARATOR)) {
+            return null;
+        }
+
+        if (!file_exists($realPath)) {
             return null;
         }
 
         return [
-            'path' => $filePath,
+            'path' => $realPath,
             'original_name' => $document['original_name'],
             'mime_type' => $document['mime_type'],
         ];

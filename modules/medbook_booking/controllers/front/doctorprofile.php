@@ -15,15 +15,15 @@ class Medbook_bookingDoctorprofileModuleFrontController extends ModuleFrontContr
         parent::initContent();
 
         $langId = (int) $this->context->language->id;
-        $doctorId = (int) Tools::getValue('id', 0);
+        $doctorProfileId = (int) Tools::getValue('id', 0);
 
-        if ($doctorId <= 0) {
+        if ($doctorProfileId <= 0) {
             Tools::redirect($this->context->link->getModuleLink('medbook_booking', 'doctorsearch'));
 
             return;
         }
 
-        $doctor = $this->loadDoctorProfile($doctorId, $langId);
+        $doctor = $this->loadDoctorProfile($doctorProfileId, $langId);
 
         if (empty($doctor)) {
             Tools::redirect($this->context->link->getModuleLink('medbook_booking', 'doctorsearch'));
@@ -50,21 +50,30 @@ class Medbook_bookingDoctorprofileModuleFrontController extends ModuleFrontContr
     /**
      * @return array<string, mixed>
      */
-    private function loadDoctorProfile(int $doctorId, int $langId): array
+    private function loadDoctorProfile(int $doctorProfileId, int $langId): array
     {
-        $sql = 'SELECT d.`id_medbook_doctor` as `id`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `name`,
-                       d.`photo_url`,
-                       d.`rating`,
-                       d.`reviews_count`,
-                       d.`consultation_price` as `price`,
-                       d.`pwz_number`,
-                       d.`bio`,
-                       d.`experience`,
-                       d.`id_medbook_resource` as `resource_id`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor` d
-                WHERE d.`id_medbook_doctor` = ' . $doctorId . '
-                  AND d.`active` = 1';
+        $sql = 'SELECT dp.`id_doctor_profile` as `id`,
+                       rl.`name`,
+                       dp.`photo`,
+                       dp.`experience_years`,
+                       dp.`pwz_number`,
+                       dp.`education`,
+                       dp.`certifications`,
+                       dp.`languages`,
+                       dp.`consultation_online`,
+                       dp.`consultation_inperson`,
+                       r.`base_price` as `price`,
+                       r.`id_resource` as `resource_id`,
+                       s.`name` as `specialization_name`
+                FROM `' . _DB_PREFIX_ . 'medbook_doctor_profile` dp
+                INNER JOIN `' . _DB_PREFIX_ . 'medbook_resource` r
+                    ON r.`id_resource` = dp.`id_resource`
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = r.`id_resource` AND rl.`id_lang` = ' . $langId . '
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization` s
+                    ON s.`id_specialization` = dp.`id_specialization`
+                WHERE dp.`id_doctor_profile` = ' . $doctorProfileId . '
+                  AND r.`is_active` = 1';
 
         $result = \Db::getInstance()->getRow($sql);
 
@@ -72,16 +81,19 @@ class Medbook_bookingDoctorprofileModuleFrontController extends ModuleFrontContr
             return [];
         }
 
-        // Load specializations
-        $result['specializations'] = $this->loadDoctorSpecializations($doctorId, $langId);
-        $result['specialization'] = !empty($result['specializations']) ? $result['specializations'][0]['name'] : '';
+        // Load specialization
+        $result['specialization'] = $result['specialization_name'] ?? '';
+        $result['specializations'] = [];
+        if (!empty($result['specialization_name'])) {
+            $result['specializations'][] = ['name' => $result['specialization_name']];
+        }
 
         // Load clinics
-        $result['clinics'] = $this->loadDoctorClinics($doctorId);
+        $result['clinics'] = $this->loadDoctorClinics((int) $result['resource_id']);
 
-        // Load education and certifications (stored as JSON)
-        $result['education'] = $this->loadDoctorMeta($doctorId, 'education');
-        $result['certifications'] = $this->loadDoctorMeta($doctorId, 'certifications');
+        // Parse education and certifications (stored as TEXT, may be JSON)
+        $result['education_list'] = $this->parseTextOrJson($result['education'] ?? '');
+        $result['certifications_list'] = $this->parseTextOrJson($result['certifications'] ?? '');
 
         // Reviews placeholder
         $result['reviews'] = [];
@@ -92,30 +104,13 @@ class Medbook_bookingDoctorprofileModuleFrontController extends ModuleFrontContr
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function loadDoctorSpecializations(int $doctorId, int $langId): array
+    private function loadDoctorClinics(int $resourceId): array
     {
-        $sql = 'SELECT sl.`name`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor_specialization` ds
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization_lang` sl
-                    ON ds.`id_medbook_specialization` = sl.`id_medbook_specialization`
-                    AND sl.`id_lang` = ' . $langId . '
-                WHERE ds.`id_medbook_doctor` = ' . $doctorId;
-
-        $result = \Db::getInstance()->executeS($sql);
-
-        return is_array($result) ? $result : [];
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    private function loadDoctorClinics(int $doctorId): array
-    {
-        $sql = 'SELECT c.`name`, CONCAT(c.`street`, \', \', c.`postal_code`, \' \', c.`city`) as `address`, c.`phone`
+        $sql = 'SELECT c.`name`, CONCAT(c.`address`, \', \', c.`postal_code`, \' \', c.`city`) as `full_address`, c.`phone`
                 FROM `' . _DB_PREFIX_ . 'medbook_doctor_clinic` dc
                 INNER JOIN `' . _DB_PREFIX_ . 'medbook_clinic` c
-                    ON dc.`id_medbook_clinic` = c.`id_medbook_clinic`
-                WHERE dc.`id_medbook_doctor` = ' . $doctorId;
+                    ON dc.`id_clinic` = c.`id_clinic`
+                WHERE dc.`id_resource` = ' . $resourceId;
 
         $result = \Db::getInstance()->executeS($sql);
 
@@ -125,22 +120,19 @@ class Medbook_bookingDoctorprofileModuleFrontController extends ModuleFrontContr
     /**
      * @return array<int, string>
      */
-    private function loadDoctorMeta(int $doctorId, string $key): array
+    private function parseTextOrJson(string $value): array
     {
-        $sql = 'SELECT `value`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor_meta`
-                WHERE `id_medbook_doctor` = ' . $doctorId . '
-                  AND `meta_key` = \'' . pSQL($key) . '\'';
-
-        $result = \Db::getInstance()->getValue($sql);
-
-        if (!$result) {
+        if (empty($value)) {
             return [];
         }
 
-        $decoded = json_decode((string) $result, true);
+        $decoded = json_decode($value, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
 
-        return is_array($decoded) ? $decoded : [];
+        // Treat as plain text - return as single-element array
+        return [$value];
     }
 
     /**

@@ -25,21 +25,17 @@ class Medbook_bookingCartbookingModuleFrontController extends ModuleFrontControl
             $this->context->cookie->id_cart = (int) $cart->id;
         }
 
-        // CSRF validation: verify the cart secure_key matches the posted token
+        // CSRF validation: always require a valid token matching the cart secure_key
         $token = (string) Tools::getValue('token', '');
-        $secureKey = $cart->secure_key ?? '';
+        $secureKey = (string) ($cart->secure_key ?? '');
 
-        // If both token and secure_key are empty (edge case: newly created cart for guest),
-        // skip validation. Otherwise, require a match.
-        if ($secureKey !== '' || $token !== '') {
-            if (!$token || $token !== $secureKey) {
-                $this->ajaxRender(json_encode([
-                    'success' => false,
-                    'error' => 'Invalid security token.',
-                ]));
+        if (!$token || !$secureKey || $token !== $secureKey) {
+            $this->ajaxRender(json_encode([
+                'success' => false,
+                'error' => 'Invalid security token.',
+            ]));
 
-                return;
-            }
+            return;
         }
 
         $resourceId = (int) Tools::getValue('resource_id', 0);

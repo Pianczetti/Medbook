@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS `PREFIX_medbook_prescription`;
+DROP TABLE IF EXISTS `PREFIX_medbook_data_retention`;
+DROP TABLE IF EXISTS `PREFIX_medbook_consent`;
 DROP TABLE IF EXISTS `PREFIX_medbook_document`;
 DROP TABLE IF EXISTS `PREFIX_medbook_doctor_clinic`;
 DROP TABLE IF EXISTS `PREFIX_medbook_doctor_profile`;

@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_booking` (
     `confirmed_at` DATETIME DEFAULT NULL,
     PRIMARY KEY (`id_booking`),
     UNIQUE KEY `uniq_medbook_reference` (`reference_code`),
+    UNIQUE KEY `uniq_medbook_booking_slot` (`id_resource`, `booking_date`, `time_start`, `time_end`),
     INDEX `idx_medbook_resource_date` (`id_resource`, `booking_date`),
     INDEX `idx_medbook_status` (`status`),
     INDEX `idx_medbook_customer` (`id_customer`)
@@ -334,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_prescription` (
     `id_prescription` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `id_booking` INT(11) UNSIGNED NOT NULL,
     `patient_name` VARCHAR(255) NOT NULL,
-    `pesel` VARCHAR(11) DEFAULT NULL,
+    `pesel` VARCHAR(255) DEFAULT NULL,
     `doctor_name` VARCHAR(255) NOT NULL,
     `pwz_number` VARCHAR(7) DEFAULT NULL,
     `diagnosis_code` VARCHAR(16) DEFAULT NULL,

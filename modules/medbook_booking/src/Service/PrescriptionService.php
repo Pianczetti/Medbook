@@ -9,10 +9,83 @@ use TCPDF;
 
 final class PrescriptionService
 {
+    private const CIPHER_METHOD = 'aes-256-cbc';
+
     public function __construct(
         private readonly Connection $connection,
         private readonly string $dbPrefix,
+        private readonly string $encryptionKey = '',
     ) {
+    }
+
+    /**
+     * Encrypt a PESEL value for secure storage.
+     */
+    private function encryptPesel(string $pesel): string
+    {
+        if ($pesel === '' || $this->getEncryptionKey() === '') {
+            return $pesel;
+        }
+
+        $iv = random_bytes((int) openssl_cipher_iv_length(self::CIPHER_METHOD));
+        $encrypted = openssl_encrypt($pesel, self::CIPHER_METHOD, $this->getEncryptionKey(), OPENSSL_RAW_DATA, $iv);
+
+        if ($encrypted === false) {
+            return $pesel;
+        }
+
+        return base64_encode($iv . $encrypted);
+    }
+
+    /**
+     * Decrypt a PESEL value from storage.
+     */
+    private function decryptPesel(string $encryptedPesel): string
+    {
+        if ($encryptedPesel === '' || $this->getEncryptionKey() === '') {
+            return $encryptedPesel;
+        }
+
+        $data = base64_decode($encryptedPesel, true);
+        if ($data === false) {
+            // Not encrypted (legacy plaintext), return as-is
+            return $encryptedPesel;
+        }
+
+        $ivLength = (int) openssl_cipher_iv_length(self::CIPHER_METHOD);
+        if (strlen($data) <= $ivLength) {
+            // Too short to be encrypted data, return as-is
+            return $encryptedPesel;
+        }
+
+        $iv = substr($data, 0, $ivLength);
+        $ciphertext = substr($data, $ivLength);
+
+        $decrypted = openssl_decrypt($ciphertext, self::CIPHER_METHOD, $this->getEncryptionKey(), OPENSSL_RAW_DATA, $iv);
+
+        if ($decrypted === false) {
+            // Decryption failed (possibly legacy plaintext), return as-is
+            return $encryptedPesel;
+        }
+
+        return $decrypted;
+    }
+
+    /**
+     * Get the encryption key, falling back to PS cookie key if none configured.
+     */
+    private function getEncryptionKey(): string
+    {
+        if ($this->encryptionKey !== '') {
+            return $this->encryptionKey;
+        }
+
+        // Fall back to _COOKIE_KEY_ which is always available in PrestaShop
+        if (defined('_COOKIE_KEY_')) {
+            return (string) _COOKIE_KEY_;
+        }
+
+        return '';
     }
 
     /**
@@ -117,10 +190,13 @@ final class PrescriptionService
      */
     public function savePrescription(int $bookingId, array $data): int
     {
+        $pesel = $data['pesel'] ?? '';
+        $encryptedPesel = $this->encryptPesel($pesel);
+
         $this->connection->insert($this->dbPrefix . 'medbook_prescription', [
             'id_booking' => $bookingId,
             'patient_name' => $data['patient_name'],
-            'pesel' => $data['pesel'] ?? '',
+            'pesel' => $encryptedPesel,
             'doctor_name' => $data['doctor_name'],
             'pwz_number' => $data['pwz_number'] ?? '',
             'diagnosis_code' => $data['diagnosis_code'] ?? '',
@@ -139,7 +215,7 @@ final class PrescriptionService
      */
     public function getForBooking(int $bookingId): array
     {
-        return $this->connection->createQueryBuilder()
+        $results = $this->connection->createQueryBuilder()
             ->select('*')
             ->from($this->dbPrefix . 'medbook_prescription')
             ->where('id_booking = :booking_id')
@@ -147,6 +223,14 @@ final class PrescriptionService
             ->orderBy('date_add', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();
+
+        foreach ($results as &$row) {
+            if (isset($row['pesel'])) {
+                $row['pesel'] = $this->decryptPesel($row['pesel']);
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -164,6 +248,14 @@ final class PrescriptionService
             ->executeQuery()
             ->fetchAssociative();
 
-        return $result ?: null;
+        if (!$result) {
+            return null;
+        }
+
+        if (isset($result['pesel'])) {
+            $result['pesel'] = $this->decryptPesel($result['pesel']);
+        }
+
+        return $result;
     }
 }

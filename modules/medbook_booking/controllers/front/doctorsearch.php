@@ -24,7 +24,7 @@ class Medbook_bookingDoctorsearchModuleFrontController extends ModuleFrontContro
         $insurance = (string) Tools::getValue('insurance', '');
 
         // Load specializations for the filter dropdown
-        $specializations = $this->getSpecializations($langId);
+        $specializations = $this->getSpecializations();
 
         // Perform search if any filter is set
         $doctors = [];
@@ -52,15 +52,12 @@ class Medbook_bookingDoctorsearchModuleFrontController extends ModuleFrontContro
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getSpecializations(int $langId): array
+    private function getSpecializations(): array
     {
-        $sql = 'SELECT s.`id_medbook_specialization` as `id`, sl.`name`
+        $sql = 'SELECT s.`id_specialization` as `id`, s.`name`
                 FROM `' . _DB_PREFIX_ . 'medbook_specialization` s
-                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization_lang` sl
-                    ON s.`id_medbook_specialization` = sl.`id_medbook_specialization`
-                    AND sl.`id_lang` = ' . $langId . '
-                WHERE s.`active` = 1
-                ORDER BY sl.`name` ASC';
+                WHERE s.`is_active` = 1
+                ORDER BY s.`name` ASC';
 
         $result = \Db::getInstance()->executeS($sql);
 
@@ -72,33 +69,44 @@ class Medbook_bookingDoctorsearchModuleFrontController extends ModuleFrontContro
      */
     private function searchDoctors(int $langId, int $specializationId, string $city, string $availability, string $visitType, string $insurance): array
     {
-        $where = ['d.`active` = 1'];
+        $where = ['r.`is_active` = 1', 'r.`resource_type` = \'doctor\''];
         $joins = '';
 
         if ($specializationId > 0) {
-            $joins .= ' INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor_specialization` ds
-                        ON d.`id_medbook_doctor` = ds.`id_medbook_doctor`
-                        AND ds.`id_medbook_specialization` = ' . $specializationId;
+            $where[] = 'dp.`id_specialization` = ' . $specializationId;
         }
 
         if ($city !== '') {
             $joins .= ' INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor_clinic` dc
-                        ON d.`id_medbook_doctor` = dc.`id_medbook_doctor`
+                        ON dc.`id_resource` = r.`id_resource`
                         INNER JOIN `' . _DB_PREFIX_ . 'medbook_clinic` c
-                        ON dc.`id_medbook_clinic` = c.`id_medbook_clinic`';
+                        ON dc.`id_clinic` = c.`id_clinic`';
             $where[] = 'c.`city` LIKE \'%' . pSQL($city) . '%\'';
         }
 
-        $sql = 'SELECT d.`id_medbook_doctor` as `id`,
-                       CONCAT(d.`title`, \' \', d.`firstname`, \' \', d.`lastname`) as `name`,
-                       d.`photo_url`,
-                       d.`rating`,
-                       d.`reviews_count`,
-                       d.`consultation_price` as `price`
-                FROM `' . _DB_PREFIX_ . 'medbook_doctor` d
+        if ($visitType === 'online') {
+            $where[] = 'dp.`consultation_online` = 1';
+        } elseif ($visitType === 'stacjonarna') {
+            $where[] = 'dp.`consultation_inperson` = 1';
+        }
+
+        $sql = 'SELECT dp.`id_doctor_profile` as `id`,
+                       rl.`name`,
+                       dp.`photo`,
+                       dp.`experience_years`,
+                       r.`base_price` as `price`,
+                       r.`id_resource` as `resource_id`,
+                       s.`name` as `specialization_name`
+                FROM `' . _DB_PREFIX_ . 'medbook_resource` r
+                INNER JOIN `' . _DB_PREFIX_ . 'medbook_doctor_profile` dp
+                    ON dp.`id_resource` = r.`id_resource`
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_resource_lang` rl
+                    ON rl.`id_resource` = r.`id_resource` AND rl.`id_lang` = ' . $langId . '
+                LEFT JOIN `' . _DB_PREFIX_ . 'medbook_specialization` s
+                    ON s.`id_specialization` = dp.`id_specialization`
                 ' . $joins . '
                 WHERE ' . implode(' AND ', $where) . '
-                ORDER BY d.`rating` DESC
+                ORDER BY rl.`name` ASC
                 LIMIT 50';
 
         $results = \Db::getInstance()->executeS($sql);
@@ -114,7 +122,7 @@ class Medbook_bookingDoctorsearchModuleFrontController extends ModuleFrontContro
                 'doctorprofile',
                 ['id' => (int) $doctor['id']]
             );
-            $doctor['specialization'] = '';
+            $doctor['specialization'] = $doctor['specialization_name'] ?? '';
             $doctor['next_slot'] = '';
             $doctor['city'] = $city;
         }
