@@ -2,7 +2,7 @@
   "id": "FEAT-007",
   "type": "fix",
   "description": "Address v2 code review issues: (1) UNIQUE constraint blocks cancelled-slot rebooking, (2) DocumentService::delete() path traversal, (3) Consent grant/revoke missing CSRF protection.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Remove the unconditional UNIQUE KEY on (id_resource, booking_date, time_start, time_end) from install.sql and add a SELECT ... FOR UPDATE locking approach in BookingFrontProvider::createBooking() to prevent double-booking while allowing cancelled-slot rebooking",
     "Extract path validation into a private resolveSecurePath() helper in DocumentService.php and use it in both download() and delete()",
@@ -25,5 +25,5 @@
     "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors'"
   ],
   "blocked_reason": null,
-  "findings": null
+  "findings": "All three v2 review issues resolved. (1) Removed unconditional UNIQUE constraint from install.sql; BookingFrontProvider::createBooking() now uses SELECT ... FOR UPDATE on the resource row to serialize concurrent booking attempts while still allowing cancelled-slot rebooking since getExistingBookings() already excludes cancelled rows. (2) Extracted resolveSecurePath() private helper in DocumentService that validates realpath stays within uploadDir; used in both download() and delete() to prevent path traversal. (3) Consent controller now requires POST + valid CSRF token for grant/revoke actions; token generated via Tools::getToken(false) and included as hidden field in all consent.tpl forms. All PHP files pass syntax check."
 }
