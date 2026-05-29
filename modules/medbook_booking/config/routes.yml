@@ -709,3 +709,37 @@ admin_medbook_booking_document_delete:
     _legacy_link: 'AdminMedbookBookingDocuments:delete'
   requirements:
     documentId: \d+
+
+# =============================================================================
+# Prescriptions
+# =============================================================================
+admin_medbook_booking_prescription_create:
+  path: /modules/medbook_booking/bookings/{bookingId}/prescriptions/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PrescriptionController::createAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:prescriptionCreate'
+  requirements:
+    bookingId: \d+
+
+admin_medbook_booking_prescription_generate_pdf:
+  path: /modules/medbook_booking/bookings/{bookingId}/prescriptions/{prescriptionId}/pdf
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PrescriptionController::generatePdfAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:prescriptionPdf'
+  requirements:
+    bookingId: \d+
+    prescriptionId: \d+
+
+admin_medbook_booking_prescription_list:
+  path: /modules/medbook_booking/bookings/{bookingId}/prescriptions
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\PrescriptionController::listAction'
+    _legacy_controller: 'AdminMedbookBookingBookings'
+    _legacy_link: 'AdminMedbookBookingBookings:prescriptionList'
+  requirements:
+    bookingId: \d+

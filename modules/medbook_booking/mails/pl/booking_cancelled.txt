@@ -1,0 +1,15 @@
+Wizyta anulowana - MedBook
+
+Szanowny/a {customer_name},
+
+Informujemy, ze Twoja wizyta zostala anulowana.
+
+Lekarz: {resource_name}
+Data: {booking_date}
+Godzina: {booking_time}
+
+Jezeli chcesz umowic sie na nowy termin, skorzystaj z naszej platformy do rezerwacji.
+W razie pytan prosimy o kontakt z recepcja.
+
+Pozdrawiamy,
+Zespol MedBook

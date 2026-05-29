@@ -1,0 +1,17 @@
+Potwierdzenie rezerwacji wizyty - MedBook
+
+Szanowny/a {customer_name},
+
+Twoja wizyta zostala potwierdzona.
+
+Lekarz: {resource_name}
+Data: {booking_date}
+Godzina: {booking_time}
+Typ wizyty: {visit_type}
+Numer rezerwacji: {reference_code}
+
+Prosimy o przybycie 10 minut przed umowiona godzina.
+W razie koniecznosci odwolania wizyty, prosimy o kontakt z wyprzedzeniem.
+
+Pozdrawiamy,
+Zespol MedBook

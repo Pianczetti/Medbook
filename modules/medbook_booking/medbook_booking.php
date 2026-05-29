@@ -18,6 +18,8 @@ class Medbook_booking extends Module implements WidgetInterface
         'displayShoppingCartFooter',
         'actionBookingCancelled',
         'actionBookingCompleted',
+        'actionBookingConfirmed',
+        'actionBookingReminder',
         'displayProductAdditionalInfo',
     ];
 
@@ -381,6 +383,114 @@ class Medbook_booking extends Module implements WidgetInterface
         /** @var \MedBook\Booking\Service\RecurrenceService $recurrenceService */
         $recurrenceService = $this->get('MedBook\\Booking\\Service\\RecurrenceService');
         $recurrenceService->createSuggestion($bookingId);
+    }
+
+    public function hookActionBookingConfirmed(array $params): void
+    {
+        $bookingId = (int) ($params['id_booking'] ?? 0);
+        if ($bookingId <= 0) {
+            return;
+        }
+
+        // Generate meeting URL for online visits
+        /** @var \MedBook\Booking\Service\OnlineVisitService $onlineVisitService */
+        $onlineVisitService = $this->get('MedBook\\Booking\\Service\\OnlineVisitService');
+        $onlineVisitService->handleBookingConfirmed($bookingId);
+
+        // Send confirmation email
+        $booking = \Db::getInstance()->getRow(
+            'SELECT * FROM ' . _DB_PREFIX_ . 'medbook_booking WHERE id_booking = ' . $bookingId
+        );
+
+        if (!$booking || empty($booking['customer_email'])) {
+            return;
+        }
+
+        $resourceName = \Db::getInstance()->getValue(
+            'SELECT rl.name FROM ' . _DB_PREFIX_ . 'medbook_resource_lang rl
+             WHERE rl.id_resource = ' . (int) $booking['id_resource'] . '
+             AND rl.id_lang = ' . (int) Configuration::get('PS_LANG_DEFAULT')
+        );
+
+        $visitType = $booking['visit_type'] === 'online' ? 'Online' : 'Stacjonarna';
+
+        $templateVars = [
+            '{customer_name}' => $booking['customer_name'],
+            '{resource_name}' => $resourceName ?: '',
+            '{booking_date}' => $booking['booking_date'],
+            '{booking_time}' => $booking['time_start'] . ' - ' . $booking['time_end'],
+            '{visit_type}' => $visitType,
+            '{reference_code}' => $booking['reference_code'],
+            '{video_call_section}' => '',
+        ];
+
+        if ($booking['visit_type'] === 'online' && !empty($booking['video_call_url'])) {
+            $templateVars['{video_call_section}'] = '<p style="font-size:14px;color:#333333;margin:0 0 10px;"><strong>Link do wideokonferencji:</strong> ' . $booking['video_call_url'] . '</p>';
+        }
+
+        \Mail::send(
+            (int) Configuration::get('PS_LANG_DEFAULT'),
+            'booking_confirmation',
+            'Potwierdzenie rezerwacji wizyty',
+            $templateVars,
+            $booking['customer_email'],
+            $booking['customer_name'],
+            null,
+            null,
+            null,
+            null,
+            __DIR__ . '/mails/',
+            false,
+            (int) Configuration::get('PS_SHOP_DEFAULT')
+        );
+    }
+
+    public function hookActionBookingReminder(array $params): void
+    {
+        $bookingId = (int) ($params['id_booking'] ?? 0);
+        if ($bookingId <= 0) {
+            return;
+        }
+
+        $booking = \Db::getInstance()->getRow(
+            'SELECT * FROM ' . _DB_PREFIX_ . 'medbook_booking WHERE id_booking = ' . $bookingId
+        );
+
+        if (!$booking || empty($booking['customer_email'])) {
+            return;
+        }
+
+        $resourceName = \Db::getInstance()->getValue(
+            'SELECT rl.name FROM ' . _DB_PREFIX_ . 'medbook_resource_lang rl
+             WHERE rl.id_resource = ' . (int) $booking['id_resource'] . '
+             AND rl.id_lang = ' . (int) Configuration::get('PS_LANG_DEFAULT')
+        );
+
+        $visitType = $booking['visit_type'] === 'online' ? 'Online' : 'Stacjonarna';
+
+        $templateVars = [
+            '{customer_name}' => $booking['customer_name'],
+            '{resource_name}' => $resourceName ?: '',
+            '{booking_date}' => $booking['booking_date'],
+            '{booking_time}' => $booking['time_start'] . ' - ' . $booking['time_end'],
+            '{visit_type}' => $visitType,
+        ];
+
+        \Mail::send(
+            (int) Configuration::get('PS_LANG_DEFAULT'),
+            'booking_reminder',
+            'Przypomnienie o wizycie',
+            $templateVars,
+            $booking['customer_email'],
+            $booking['customer_name'],
+            null,
+            null,
+            null,
+            null,
+            __DIR__ . '/mails/',
+            false,
+            (int) Configuration::get('PS_SHOP_DEFAULT')
+        );
     }
 
     public function hookDisplayProductAdditionalInfo(array $params): string

@@ -1,3 +1,10 @@
+MedBook - Polska platforma do rezerwacji wizyt lekarskich
+--------
+
+> **Ten fork PrestaShop 9 zostal przeksztalcony w dedykowana platforme medyczna do rezerwacji wizyt lekarskich.** MedBook obsluguje rezerwacje wizyt online i stacjonarnych, e-recepty, profile lekarzy, dokumentacje medyczna oraz zarzadzanie zgodami RODO. Pelna dokumentacja platformy MedBook znajduje sie w pliku [MEDBOOK.md](MEDBOOK.md).
+
+---
+
 About PrestaShop
 --------
 

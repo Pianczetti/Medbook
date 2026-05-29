@@ -1,0 +1,46 @@
+{% extends '@Modules/medbook_booking/views/templates/admin/layout.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-header-title">Recepty (rezerwacja #{{ bookingId }})</h3>
+            <div class="card-header-right">
+                <a href="{{ path('admin_medbook_booking_prescription_create', {bookingId: bookingId}) }}" class="btn btn-primary btn-sm">
+                    Nowa recepta
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if prescriptions|length > 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pacjent</th>
+                            <th>Lekarz</th>
+                            <th>Data wystawienia</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prescription in prescriptions %}
+                            <tr>
+                                <td>{{ prescription.id_prescription }}</td>
+                                <td>{{ prescription.patient_name }}</td>
+                                <td>{{ prescription.doctor_name }}</td>
+                                <td>{{ prescription.date_add }}</td>
+                                <td>
+                                    <a href="{{ path('admin_medbook_booking_prescription_generate_pdf', {bookingId: bookingId, prescriptionId: prescription.id_prescription}) }}" class="btn btn-sm btn-outline-primary">
+                                        Pobierz PDF
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">Brak recept dla tej rezerwacji.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+Recepta gotowa do odbioru - MedBook
+
+Szanowny/a {customer_name},
+
+Informujemy, ze Twoja e-recepta zostala wystawiona i jest gotowa do realizacji.
+
+Lekarz: {doctor_name}
+Data wystawienia: {prescription_date}
+Kod recepty: {prescription_code}
+
+Recepte mozesz zrealizowac w dowolnej aptece na terenie Polski.
+Waznosc recepty wynosi 30 dni od daty wystawienia.
+
+Mozesz rowniez pobrac recepte ze swojego panelu pacjenta w sekcji "Moje dokumenty".
+
+Pozdrawiamy,
+Zespol MedBook

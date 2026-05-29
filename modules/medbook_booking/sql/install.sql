@@ -307,3 +307,40 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_document` (
     INDEX `idx_medbook_document_customer` (`id_customer`),
     INDEX `idx_medbook_document_booking` (`id_booking`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_consent` (
+    `id_consent` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_customer` INT(11) UNSIGNED NOT NULL,
+    `consent_type` ENUM('medical_data','marketing','third_party') NOT NULL,
+    `granted_at` DATETIME NOT NULL,
+    `revoked_at` DATETIME DEFAULT NULL,
+    `ip_address` VARCHAR(45) NOT NULL,
+    `version` VARCHAR(16) NOT NULL DEFAULT '1.0',
+    PRIMARY KEY (`id_consent`),
+    INDEX `idx_medbook_consent_customer` (`id_customer`),
+    INDEX `idx_medbook_consent_type` (`consent_type`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_data_retention` (
+    `id_retention` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `entity_type` VARCHAR(64) NOT NULL,
+    `retention_days` INT(11) UNSIGNED NOT NULL,
+    `is_active` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+    `date_add` DATETIME NOT NULL,
+    PRIMARY KEY (`id_retention`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_prescription` (
+    `id_prescription` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_booking` INT(11) UNSIGNED NOT NULL,
+    `patient_name` VARCHAR(255) NOT NULL,
+    `pesel` VARCHAR(11) DEFAULT NULL,
+    `doctor_name` VARCHAR(255) NOT NULL,
+    `pwz_number` VARCHAR(7) DEFAULT NULL,
+    `diagnosis_code` VARCHAR(16) DEFAULT NULL,
+    `medications_json` TEXT NOT NULL,
+    `notes` TEXT DEFAULT NULL,
+    `date_add` DATETIME NOT NULL,
+    PRIMARY KEY (`id_prescription`),
+    INDEX `idx_medbook_prescription_booking` (`id_booking`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;

@@ -70,6 +70,36 @@ services:
       $hookDispatcher: '@prestashop.core.hook.dispatcher'
     public: true
 
+  MedBook\Booking\Service\PrescriptionService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\ConsentService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Service\DocumentService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+      $uploadDir: '%kernel.project_dir%/upload/medbook_documents'
+    public: true
+
+  MedBook\Booking\Service\OnlineVisitService:
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+      $dbPrefix: '%database_prefix%'
+    public: true
+
+  MedBook\Booking\Controller\Admin\PrescriptionController:
+    arguments:
+      $prescriptionService: '@MedBook\Booking\Service\PrescriptionService'
+    tags: ['controller.service_arguments']
+
   MedBook\Booking\Controller\Admin\CalendarController:
     arguments:
       $connection: '@doctrine.dbal.default_connection'
