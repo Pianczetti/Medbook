@@ -46,7 +46,7 @@ class Medbook_booking extends Module implements WidgetInterface
             [
                 'class_name' => 'AdminMedbookBookingResources',
                 'visible' => true,
-                'name' => 'Lekarze',
+                'name' => 'MedBook',
                 'route_name' => 'admin_medbook_booking_resource_index',
                 'parent_class_name' => 'AdminParentThemes',
             ],
@@ -55,6 +55,34 @@ class Medbook_booking extends Module implements WidgetInterface
                 'visible' => true,
                 'name' => 'Rezerwacje',
                 'route_name' => 'admin_medbook_booking_booking_index',
+                'parent_class_name' => 'AdminMedbookBookingResources',
+            ],
+            [
+                'class_name' => 'AdminMedbookBookingDoctors',
+                'visible' => true,
+                'name' => 'Lekarze',
+                'route_name' => 'admin_medbook_booking_doctor_profile_index',
+                'parent_class_name' => 'AdminMedbookBookingResources',
+            ],
+            [
+                'class_name' => 'AdminMedbookBookingClinics',
+                'visible' => true,
+                'name' => 'Przychodnie',
+                'route_name' => 'admin_medbook_booking_clinic_index',
+                'parent_class_name' => 'AdminMedbookBookingResources',
+            ],
+            [
+                'class_name' => 'AdminMedbookBookingSpecializations',
+                'visible' => true,
+                'name' => 'Specjalizacje',
+                'route_name' => 'admin_medbook_booking_specialization_index',
+                'parent_class_name' => 'AdminMedbookBookingResources',
+            ],
+            [
+                'class_name' => 'AdminMedbookBookingDocuments',
+                'visible' => true,
+                'name' => 'Dokumenty',
+                'route_name' => 'admin_medbook_booking_document_index',
                 'parent_class_name' => 'AdminMedbookBookingResources',
             ],
             [
@@ -154,7 +182,48 @@ class Medbook_booking extends Module implements WidgetInterface
         Configuration::updateValue('MEDBOOK_BOOKING_REMINDER_HOURS_BEFORE', 24);
         Configuration::updateValue('MEDBOOK_BOOKING_WAITLIST_NOTIFICATION_HOURS', 4);
 
+        $this->installDefaultSpecializations();
+
         return true;
+    }
+
+    private function installDefaultSpecializations(): void
+    {
+        $specializations = [
+            ['name' => 'Kardiologia', 'slug' => 'kardiologia'],
+            ['name' => 'Dermatologia', 'slug' => 'dermatologia'],
+            ['name' => 'Endokrynologia', 'slug' => 'endokrynologia'],
+            ['name' => 'Gastroenterologia', 'slug' => 'gastroenterologia'],
+            ['name' => 'Ginekologia', 'slug' => 'ginekologia'],
+            ['name' => 'Neurologia', 'slug' => 'neurologia'],
+            ['name' => 'Okulistyka', 'slug' => 'okulistyka'],
+            ['name' => 'Ortopedia', 'slug' => 'ortopedia'],
+            ['name' => 'Pediatria', 'slug' => 'pediatria'],
+            ['name' => 'Psychiatria', 'slug' => 'psychiatria'],
+            ['name' => 'Pulmonologia', 'slug' => 'pulmonologia'],
+            ['name' => 'Radiologia', 'slug' => 'radiologia'],
+            ['name' => 'Reumatologia', 'slug' => 'reumatologia'],
+            ['name' => 'Urologia', 'slug' => 'urologia'],
+            ['name' => 'Stomatologia', 'slug' => 'stomatologia'],
+            ['name' => 'Laryngologia', 'slug' => 'laryngologia'],
+            ['name' => 'Alergologia', 'slug' => 'alergologia'],
+            ['name' => 'Onkologia', 'slug' => 'onkologia'],
+            ['name' => 'Medycyna rodzinna', 'slug' => 'medycyna-rodzinna'],
+            ['name' => 'Chirurgia ogolna', 'slug' => 'chirurgia-ogolna'],
+        ];
+
+        $db = \Db::getInstance();
+        $position = 0;
+
+        foreach ($specializations as $spec) {
+            $db->insert(_DB_PREFIX_ . 'medbook_specialization', [
+                'name' => pSQL($spec['name']),
+                'slug' => pSQL($spec['slug']),
+                'icon' => null,
+                'is_active' => 1,
+                'position' => $position++,
+            ]);
+        }
     }
 
     public function uninstall(): bool

@@ -71,6 +71,25 @@ class BookingType extends AbstractType
                 'label' => 'Admin Notes',
                 'required' => false,
                 'attr' => ['rows' => 4],
+            ])
+            ->add('visit_type', ChoiceType::class, [
+                'label' => 'Typ wizyty',
+                'choices' => [
+                    'Stacjonarna' => 'stacjonarna',
+                    'Online' => 'online',
+                ],
+                'required' => true,
+                'data' => 'stacjonarna',
+            ])
+            ->add('insurance_type', ChoiceType::class, [
+                'label' => 'Ubezpieczenie',
+                'choices' => [
+                    'NFZ' => 'NFZ',
+                    'Prywatne' => 'prywatne',
+                    'Pakiet' => 'pakiet',
+                ],
+                'required' => true,
+                'data' => 'prywatne',
             ]);
     }
 }

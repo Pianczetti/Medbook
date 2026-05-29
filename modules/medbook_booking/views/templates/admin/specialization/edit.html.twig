@@ -1,0 +1,24 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-header-title">{{ 'Edytuj specjalizacje'|trans({}, 'Modules.Medbookbooking.Admin') }}</h3>
+        </div>
+        <div class="card-body">
+          {{ form_start(specializationForm) }}
+            {{ form_widget(specializationForm) }}
+            <button type="submit" class="btn btn-primary">
+              {{ 'Save'|trans({}, 'Admin.Actions') }}
+            </button>
+            <a href="{{ path('admin_medbook_booking_specialization_index') }}" class="btn btn-outline-secondary">
+              {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+            </a>
+          {{ form_end(specializationForm) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

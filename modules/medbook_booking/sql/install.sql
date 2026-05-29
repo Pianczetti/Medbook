@@ -59,6 +59,9 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_booking` (
     `deposit_paid` DECIMAL(10,2) NOT NULL DEFAULT 0,
     `id_employee` INT(11) UNSIGNED DEFAULT NULL,
     `reference_code` VARCHAR(16) NOT NULL,
+    `visit_type` ENUM('stacjonarna','online') NOT NULL DEFAULT 'stacjonarna',
+    `insurance_type` ENUM('NFZ','prywatne','pakiet') NOT NULL DEFAULT 'prywatne',
+    `video_call_url` VARCHAR(512) DEFAULT NULL,
     `date_add` DATETIME NOT NULL,
     `date_upd` DATETIME NOT NULL,
     `confirmed_at` DATETIME DEFAULT NULL,
@@ -224,4 +227,83 @@ CREATE TABLE IF NOT EXISTS `PREFIX_medbook_waitlist` (
     PRIMARY KEY (`id_waitlist`),
     INDEX `idx_medbook_waitlist_resource` (`id_resource`),
     INDEX `idx_medbook_waitlist_status` (`status`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_specialization` (
+    `id_specialization` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(128) NOT NULL,
+    `slug` VARCHAR(128) NOT NULL,
+    `icon` VARCHAR(64) DEFAULT NULL,
+    `is_active` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+    `position` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id_specialization`),
+    INDEX `idx_medbook_specialization_active` (`is_active`),
+    INDEX `idx_medbook_specialization_slug` (`slug`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_clinic` (
+    `id_clinic` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
+    `city` VARCHAR(128) NOT NULL,
+    `postal_code` VARCHAR(6) NOT NULL,
+    `voivodeship` VARCHAR(64) DEFAULT NULL,
+    `lat` DECIMAL(10,8) DEFAULT NULL,
+    `lng` DECIMAL(11,8) DEFAULT NULL,
+    `phone` VARCHAR(32) DEFAULT NULL,
+    `email` VARCHAR(128) DEFAULT NULL,
+    `opening_hours_json` TEXT DEFAULT NULL,
+    `is_active` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+    `date_add` DATETIME NOT NULL,
+    `date_upd` DATETIME NOT NULL,
+    PRIMARY KEY (`id_clinic`),
+    INDEX `idx_medbook_clinic_active` (`is_active`),
+    INDEX `idx_medbook_clinic_city` (`city`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_doctor_profile` (
+    `id_doctor_profile` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_resource` INT(11) UNSIGNED NOT NULL,
+    `id_specialization` INT(11) UNSIGNED DEFAULT NULL,
+    `education` TEXT DEFAULT NULL,
+    `experience_years` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `languages` VARCHAR(255) DEFAULT NULL,
+    `certifications` TEXT DEFAULT NULL,
+    `photo` VARCHAR(255) DEFAULT NULL,
+    `nip` VARCHAR(10) DEFAULT NULL,
+    `pwz_number` VARCHAR(7) DEFAULT NULL,
+    `consultation_online` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+    `consultation_inperson` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+    `date_add` DATETIME NOT NULL,
+    `date_upd` DATETIME NOT NULL,
+    PRIMARY KEY (`id_doctor_profile`),
+    INDEX `idx_medbook_doctor_profile_resource` (`id_resource`),
+    INDEX `idx_medbook_doctor_profile_specialization` (`id_specialization`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_doctor_clinic` (
+    `id_doctor_clinic` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_resource` INT(11) UNSIGNED NOT NULL,
+    `id_clinic` INT(11) UNSIGNED NOT NULL,
+    `room_number` VARCHAR(32) DEFAULT NULL,
+    `is_primary` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id_doctor_clinic`),
+    INDEX `idx_medbook_doctor_clinic_resource` (`id_resource`),
+    INDEX `idx_medbook_doctor_clinic_clinic` (`id_clinic`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_medbook_document` (
+    `id_document` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_customer` INT(11) UNSIGNED NOT NULL,
+    `id_booking` INT(11) UNSIGNED DEFAULT NULL,
+    `document_type` ENUM('prescription','referral','result','other') NOT NULL DEFAULT 'other',
+    `filename` VARCHAR(255) NOT NULL,
+    `original_name` VARCHAR(255) NOT NULL,
+    `mime_type` VARCHAR(64) NOT NULL,
+    `file_size` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `uploaded_by` ENUM('patient','doctor','admin') NOT NULL DEFAULT 'patient',
+    `date_add` DATETIME NOT NULL,
+    PRIMARY KEY (`id_document`),
+    INDEX `idx_medbook_document_customer` (`id_customer`),
+    INDEX `idx_medbook_document_booking` (`id_booking`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;

@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS `PREFIX_medbook_document`;
+DROP TABLE IF EXISTS `PREFIX_medbook_doctor_clinic`;
+DROP TABLE IF EXISTS `PREFIX_medbook_doctor_profile`;
+DROP TABLE IF EXISTS `PREFIX_medbook_clinic`;
+DROP TABLE IF EXISTS `PREFIX_medbook_specialization`;
 DROP TABLE IF EXISTS `PREFIX_medbook_waitlist`;
 DROP TABLE IF EXISTS `PREFIX_medbook_suggested_visit`;
 DROP TABLE IF EXISTS `PREFIX_medbook_recurrence_config`;

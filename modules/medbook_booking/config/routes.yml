@@ -519,3 +519,193 @@ admin_medbook_booking_waitlist_remove:
     _legacy_link: 'AdminMedbookBookingWaitlist:remove'
   requirements:
     waitlistId: \d+
+
+# =============================================================================
+# Doctor Profiles
+# =============================================================================
+admin_medbook_booking_doctor_profile_index:
+  path: /modules/medbook_booking/doctor-profiles
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DoctorProfileController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingDoctors'
+    _legacy_link: 'AdminMedbookBookingDoctors'
+
+admin_medbook_booking_doctor_profile_search:
+  path: /modules/medbook_booking/doctor-profiles
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DoctorProfileController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingDoctors'
+    _legacy_link: 'AdminMedbookBookingDoctors:search'
+
+admin_medbook_booking_doctor_profile_create:
+  path: /modules/medbook_booking/doctor-profiles/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DoctorProfileController::createAction'
+    _legacy_controller: 'AdminMedbookBookingDoctors'
+    _legacy_link: 'AdminMedbookBookingDoctors:create'
+
+admin_medbook_booking_doctor_profile_edit:
+  path: /modules/medbook_booking/doctor-profiles/{doctorProfileId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DoctorProfileController::editAction'
+    _legacy_controller: 'AdminMedbookBookingDoctors'
+    _legacy_link: 'AdminMedbookBookingDoctors:edit'
+  requirements:
+    doctorProfileId: \d+
+
+admin_medbook_booking_doctor_profile_delete:
+  path: /modules/medbook_booking/doctor-profiles/{doctorProfileId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DoctorProfileController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingDoctors'
+    _legacy_link: 'AdminMedbookBookingDoctors:delete'
+  requirements:
+    doctorProfileId: \d+
+
+# =============================================================================
+# Clinics
+# =============================================================================
+admin_medbook_booking_clinic_index:
+  path: /modules/medbook_booking/clinics
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics'
+
+admin_medbook_booking_clinic_search:
+  path: /modules/medbook_booking/clinics
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics:search'
+
+admin_medbook_booking_clinic_create:
+  path: /modules/medbook_booking/clinics/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::createAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics:create'
+
+admin_medbook_booking_clinic_edit:
+  path: /modules/medbook_booking/clinics/{clinicId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::editAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics:edit'
+  requirements:
+    clinicId: \d+
+
+admin_medbook_booking_clinic_delete:
+  path: /modules/medbook_booking/clinics/{clinicId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics:delete'
+  requirements:
+    clinicId: \d+
+
+admin_medbook_booking_clinic_toggle_active:
+  path: /modules/medbook_booking/clinics/{clinicId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\ClinicController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingClinics'
+    _legacy_link: 'AdminMedbookBookingClinics:toggleActive'
+  requirements:
+    clinicId: \d+
+
+# =============================================================================
+# Specializations
+# =============================================================================
+admin_medbook_booking_specialization_index:
+  path: /modules/medbook_booking/specializations
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations'
+
+admin_medbook_booking_specialization_search:
+  path: /modules/medbook_booking/specializations
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations:search'
+
+admin_medbook_booking_specialization_create:
+  path: /modules/medbook_booking/specializations/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::createAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations:create'
+
+admin_medbook_booking_specialization_edit:
+  path: /modules/medbook_booking/specializations/{specializationId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::editAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations:edit'
+  requirements:
+    specializationId: \d+
+
+admin_medbook_booking_specialization_delete:
+  path: /modules/medbook_booking/specializations/{specializationId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations:delete'
+  requirements:
+    specializationId: \d+
+
+admin_medbook_booking_specialization_toggle_active:
+  path: /modules/medbook_booking/specializations/{specializationId}/toggle-active
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\SpecializationController::toggleActiveAction'
+    _legacy_controller: 'AdminMedbookBookingSpecializations'
+    _legacy_link: 'AdminMedbookBookingSpecializations:toggleActive'
+  requirements:
+    specializationId: \d+
+
+# =============================================================================
+# Documents
+# =============================================================================
+admin_medbook_booking_document_index:
+  path: /modules/medbook_booking/documents
+  methods: [GET]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DocumentController::indexAction'
+    _legacy_controller: 'AdminMedbookBookingDocuments'
+    _legacy_link: 'AdminMedbookBookingDocuments'
+
+admin_medbook_booking_document_search:
+  path: /modules/medbook_booking/documents
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DocumentController::searchAction'
+    _legacy_controller: 'AdminMedbookBookingDocuments'
+    _legacy_link: 'AdminMedbookBookingDocuments:search'
+
+admin_medbook_booking_document_delete:
+  path: /modules/medbook_booking/documents/{documentId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'MedBook\Booking\Controller\Admin\DocumentController::deleteAction'
+    _legacy_controller: 'AdminMedbookBookingDocuments'
+    _legacy_link: 'AdminMedbookBookingDocuments:delete'
+  requirements:
+    documentId: \d+
