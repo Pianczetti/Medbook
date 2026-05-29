@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Copy and rebrand the sellnetic_booking module as medbook_booking into PrestaShop's modules/ directory. Rename all namespaces from Sellnetic\\Booking to MedBook\\Booking, rename table prefixes from sellnetic_booking_ to medbook_, rename all class references, service IDs, route names, and the module main class. Lock resource_type default to 'doctor'. Update all text to Polish (pl-PL) where applicable.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Copy the entire /projects/sandbox/sellnetictheme/modules/sellnetic_booking/ directory to /projects/sandbox/PrestaShop/modules/medbook_booking/",
     "Rename the main module file from sellnetic_booking.php to medbook_booking.php",
@@ -40,5 +40,5 @@
     "Run: grep \"resource_type.*DEFAULT.*doctor\" /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql to confirm doctor default"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 157 files copied and rebranded successfully. modules/* is in .gitignore so git add -f was needed. The uninstall.sql was also updated to include tables from the v1.2.0 upgrade (waitlist, suggested_visit, recurrence_config, reminder, confirm_token) that were missing from the original. PHP syntax check passed on all files. No sellnetic/Sellnetic references remain."
 }
