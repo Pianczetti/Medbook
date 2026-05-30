@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity_medbook_doctor_profile>
+  <fields id="id_doctor_profile">
+    <field name="id_resource"/>
+    <field name="specialization_id"/>
+    <field name="education"/>
+    <field name="experience_years"/>
+    <field name="languages"/>
+    <field name="certifications"/>
+    <field name="nip"/>
+    <field name="pwz_number"/>
+    <field name="consultation_online"/>
+    <field name="consultation_inperson"/>
+  </fields>
+  <entities>
+    <medbook_doctor_profile id="doctor_kowalski" id_resource="1" specialization_id="1" experience_years="15" consultation_online="1" consultation_inperson="1">
+      <education>Uniwersytet Medyczny w Warszawie, Specjalizacja z kardiologii</education>
+      <languages>polski,angielski</languages>
+      <certifications>Specjalista kardiolog, Certyfikat echokardiografii</certifications>
+      <nip>1234567890</nip>
+      <pwz_number>1234567</pwz_number>
+    </medbook_doctor_profile>
+  </entities>
+</entity_medbook_doctor_profile>

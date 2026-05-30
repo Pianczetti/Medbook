@@ -1,0 +1,962 @@
+/* MedBook Booking - Front Office Styles */
+/* BEM naming: .snbooking-{block}__{element}--{modifier} */
+/* Uses --sntic-* CSS variables for theme integration where available */
+
+/* ============================================
+   Page Layout
+   ============================================ */
+.snbooking-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.snbooking-page__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+/* ============================================
+   Errors
+   ============================================ */
+.snbooking-errors {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.snbooking-errors__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.snbooking-errors__item {
+    color: #dc2626;
+    font-size: 0.875rem;
+    padding: 0.25rem 0;
+}
+
+/* ============================================
+   Confirmation
+   ============================================ */
+.snbooking-confirmation {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.snbooking-confirmation__icon {
+    font-size: 3rem;
+    color: #16a34a;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    background: #dcfce7;
+    margin: 0 auto 1.5rem;
+}
+
+.snbooking-confirmation__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-confirmation__text {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.snbooking-confirmation__reference {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.snbooking-confirmation__label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+
+.snbooking-confirmation__code {
+    font-size: 1.25rem;
+    font-family: monospace;
+    color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-confirmation__note {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.snbooking-confirmation__btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.snbooking-confirmation__btn:hover {
+    opacity: 0.9;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ============================================
+   Resources
+   ============================================ */
+.snbooking-resources {
+    margin-bottom: 2rem;
+}
+
+.snbooking-resources__title,
+.snbooking-calendar__title,
+.snbooking-slots__title,
+.snbooking-contact__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-resources__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.snbooking-resource-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.snbooking-resource-card:hover {
+    border-color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-resource-card--selected {
+    border-color: var(--sntic-primary-color, #1a1a2e);
+    box-shadow: 0 0 0 2px rgba(26, 26, 46, 0.1);
+}
+
+.snbooking-resource-card__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.snbooking-resource-card__color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.snbooking-resource-card__name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.snbooking-resource-card__duration {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+
+.snbooking-resource-card__desc {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+/* ============================================
+   Calendar
+   ============================================ */
+.snbooking-calendar {
+    margin-bottom: 2rem;
+}
+
+.snbooking-calendar__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.snbooking-calendar__btn {
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.125rem;
+    transition: background 0.2s;
+}
+
+.snbooking-calendar__btn:hover {
+    background: #f3f4f6;
+}
+
+.snbooking-calendar__month-label {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.snbooking-calendar__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.snbooking-calendar__day-header {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    padding: 0.5rem 0;
+}
+
+.snbooking-calendar__day {
+    text-align: center;
+    padding: 0.625rem 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    background: none;
+    width: 100%;
+}
+
+.snbooking-calendar__day:hover {
+    background: #f3f4f6;
+}
+
+.snbooking-calendar__day--today {
+    font-weight: 700;
+    border: 1px solid var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-calendar__day--selected {
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+}
+
+.snbooking-calendar__day--selected:hover {
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+}
+
+.snbooking-calendar__day--disabled {
+    color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.snbooking-calendar__day--disabled:hover {
+    background: none;
+}
+
+.snbooking-calendar__day--empty {
+    cursor: default;
+}
+
+.snbooking-calendar__day--empty:hover {
+    background: none;
+}
+
+.snbooking-calendar__nojs {
+    margin-top: 1rem;
+}
+
+.snbooking-calendar__nojs-btn {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ============================================
+   Time Slots
+   ============================================ */
+.snbooking-slots {
+    margin-bottom: 2rem;
+}
+
+.snbooking-slots__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.snbooking-slot {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 0.625rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.snbooking-slot--available:hover {
+    border-color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-slot--available.snbooking-slot--selected {
+    background: var(--sntic-primary-color, #1a1a2e);
+    border-color: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+}
+
+.snbooking-slot--booked {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.snbooking-slot__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.snbooking-slot__time {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.snbooking-slots__empty {
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.snbooking-slots__loading {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   Contact Form
+   ============================================ */
+.snbooking-contact {
+    margin-bottom: 2rem;
+}
+
+.snbooking-contact__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.snbooking-contact__field--full {
+    grid-column: 1 / -1;
+}
+
+.snbooking-contact__label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.375rem;
+    color: #374151;
+}
+
+.snbooking-contact__input,
+.snbooking-contact__textarea {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.snbooking-contact__input:focus,
+.snbooking-contact__textarea:focus {
+    outline: none;
+    border-color: var(--sntic-primary-color, #1a1a2e);
+    box-shadow: 0 0 0 2px rgba(26, 26, 46, 0.08);
+}
+
+.snbooking-contact__textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ============================================
+   Submit Button
+   ============================================ */
+.snbooking-submit {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.snbooking-submit__btn {
+    display: inline-block;
+    padding: 0.875rem 2.5rem;
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.snbooking-submit__btn:hover {
+    opacity: 0.9;
+}
+
+/* ============================================
+   My Bookings
+   ============================================ */
+.snbooking-mybookings {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.snbooking-mybookings__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-mybookings__alert {
+    padding: 0.875rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.snbooking-mybookings__alert--success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.snbooking-mybookings__alert--error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
+.snbooking-mybookings__list {
+    display: grid;
+    gap: 1rem;
+}
+
+.snbooking-mybookings__card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.snbooking-mybookings__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1.25rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.snbooking-mybookings__reference {
+    font-family: monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.snbooking-mybookings__status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.snbooking-mybookings__status--pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.snbooking-mybookings__status--confirmed {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.snbooking-mybookings__status--cancelled {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.snbooking-mybookings__status--completed {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.snbooking-mybookings__status--no_show {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.snbooking-mybookings__card-body {
+    padding: 1rem 1.25rem;
+}
+
+.snbooking-mybookings__detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.snbooking-mybookings__label {
+    font-size: 0.8rem;
+    color: #6b7280;
+    min-width: 60px;
+}
+
+.snbooking-mybookings__value {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.snbooking-mybookings__card-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.snbooking-mybookings__cancel-btn {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: 1px solid #dc2626;
+    color: #dc2626;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.snbooking-mybookings__cancel-btn:hover {
+    background: #dc2626;
+    color: #fff;
+}
+
+.snbooking-mybookings__empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.snbooking-mybookings__book-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.snbooking-mybookings__book-btn:hover {
+    opacity: 0.9;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ============================================
+   Widget (displayHome)
+   ============================================ */
+.snbooking-widget {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.snbooking-widget__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-widget__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+}
+
+.snbooking-widget__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.snbooking-widget__item:last-child {
+    border-bottom: none;
+}
+
+.snbooking-widget__color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.snbooking-widget__resource {
+    font-weight: 500;
+    font-size: 0.875rem;
+    flex: 1;
+}
+
+.snbooking-widget__date {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.snbooking-widget__time {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-widget__cta {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background: var(--sntic-primary-color, #1a1a2e);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.snbooking-widget__cta:hover {
+    opacity: 0.9;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ============================================
+   Add-ons
+   ============================================ */
+.snbooking-addons {
+    margin-bottom: 2rem;
+}
+
+.snbooking-addons__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-addons__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.snbooking-addon-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.snbooking-addon-card:hover {
+    border-color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-addon-card:has(.snbooking-addon-card__input:checked) {
+    border-color: var(--sntic-primary-color, #1a1a2e);
+    box-shadow: 0 0 0 2px rgba(26, 26, 46, 0.1);
+}
+
+.snbooking-addon-card__input {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--sntic-primary-color, #1a1a2e);
+}
+
+.snbooking-addon-card__name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    padding-right: 1.5rem;
+}
+
+.snbooking-addon-card__desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.snbooking-addon-card__price {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sntic-primary-color, #1a1a2e);
+    margin-top: auto;
+}
+
+/* ============================================
+   Pricing Breakdown
+   ============================================ */
+.snbooking-pricing {
+    margin-bottom: 2rem;
+}
+
+.snbooking-pricing__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-pricing__breakdown {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+.snbooking-pricing__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.snbooking-pricing__row:last-child {
+    border-bottom: none;
+}
+
+.snbooking-pricing__row--total {
+    font-weight: 700;
+    font-size: 1rem;
+    border-top: 2px solid #e5e7eb;
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.snbooking-pricing__row--deposit {
+    color: var(--sntic-primary-color, #1a1a2e);
+    font-weight: 600;
+}
+
+/* ============================================
+   Refund Policy
+   ============================================ */
+.snbooking-refund-policy {
+    margin-bottom: 2rem;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+}
+
+.snbooking-refund-policy__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #1e40af;
+}
+
+.snbooking-refund-policy__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.snbooking-refund-policy__item {
+    position: relative;
+    padding: 0.375rem 0 0.375rem 1.25rem;
+    font-size: 0.85rem;
+    color: #1e3a5f;
+}
+
+.snbooking-refund-policy__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+}
+
+/* ============================================
+   Slot Price Label
+   ============================================ */
+.snbooking-slot__price {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.125rem;
+}
+
+.snbooking-slot--available.snbooking-slot--selected .snbooking-slot__price {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================================
+   Cart Booking Summary (hook)
+   ============================================ */
+.snbooking-cart-summary {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+}
+
+.snbooking-cart-summary__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--sntic-heading-color, #1a1a2e);
+}
+
+.snbooking-cart-summary__row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.375rem 0;
+    font-size: 0.875rem;
+}
+
+.snbooking-cart-summary__row--total {
+    font-weight: 700;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.625rem;
+    margin-top: 0.375rem;
+}
+
+.snbooking-cart-summary__row--deposit {
+    color: var(--sntic-primary-color, #1a1a2e);
+    font-weight: 600;
+}
+
+.snbooking-cart-summary__label {
+    color: #6b7280;
+}
+
+.snbooking-cart-summary__value {
+    font-weight: 500;
+}
+
+.snbooking-cart-summary__addons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.snbooking-cart-summary__addons-list li {
+    font-size: 0.8rem;
+    padding: 0.125rem 0;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .snbooking-resources__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .snbooking-addons__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .snbooking-contact__fields {
+        grid-template-columns: 1fr;
+    }
+
+    .snbooking-contact__field--full {
+        grid-column: 1;
+    }
+
+    .snbooking-calendar__grid {
+        gap: 2px;
+    }
+
+    .snbooking-calendar__day {
+        padding: 0.5rem 0;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .snbooking-page {
+        padding: 1rem 0.5rem;
+    }
+
+    .snbooking-slots__grid {
+        gap: 0.375rem;
+    }
+
+    .snbooking-slot {
+        min-width: 65px;
+        padding: 0.5rem 0.75rem;
+    }
+}

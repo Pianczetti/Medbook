@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity_medbook_clinic>
+  <fields id="name">
+    <field name="name"/>
+    <field name="address"/>
+    <field name="city"/>
+    <field name="postal_code"/>
+    <field name="voivodeship"/>
+    <field name="lat"/>
+    <field name="lng"/>
+    <field name="phone"/>
+    <field name="email"/>
+    <field name="opening_hours_json"/>
+    <field name="is_active"/>
+  </fields>
+  <entities>
+    <medbook_clinic id="przychodnia_medbook" is_active="1" lat="52.22977000" lng="21.01178000">
+      <name>Przychodnia MedBook</name>
+      <address>ul. Przykladowa 1</address>
+      <city>Warszawa</city>
+      <postal_code>00-001</postal_code>
+      <voivodeship>mazowieckie</voivodeship>
+      <phone>+48 22 123 45 67</phone>
+      <email>kontakt@medbook.pl</email>
+      <opening_hours_json>{"mon":"08:00-18:00","tue":"08:00-18:00","wed":"08:00-18:00","thu":"08:00-18:00","fri":"08:00-16:00","sat":"09:00-13:00","sun":""}</opening_hours_json>
+    </medbook_clinic>
+  </entities>
+</entity_medbook_clinic>

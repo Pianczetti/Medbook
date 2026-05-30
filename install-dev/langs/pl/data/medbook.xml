@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medbook>
+  <specializations>
+    <specialization id="kardiologia" name="Kardiologia"/>
+    <specialization id="dermatologia" name="Dermatologia"/>
+    <specialization id="endokrynologia" name="Endokrynologia"/>
+    <specialization id="gastroenterologia" name="Gastroenterologia"/>
+    <specialization id="ginekologia" name="Ginekologia"/>
+    <specialization id="neurologia" name="Neurologia"/>
+    <specialization id="okulistyka" name="Okulistyka"/>
+    <specialization id="ortopedia" name="Ortopedia"/>
+    <specialization id="pediatria" name="Pediatria"/>
+    <specialization id="psychiatria" name="Psychiatria"/>
+    <specialization id="pulmonologia" name="Pulmonologia"/>
+    <specialization id="radiologia" name="Radiologia"/>
+    <specialization id="reumatologia" name="Reumatologia"/>
+    <specialization id="urologia" name="Urologia"/>
+    <specialization id="stomatologia" name="Stomatologia"/>
+    <specialization id="laryngologia" name="Laryngologia"/>
+    <specialization id="alergologia" name="Alergologia"/>
+    <specialization id="onkologia" name="Onkologia"/>
+    <specialization id="medycyna_rodzinna" name="Medycyna rodzinna"/>
+    <specialization id="chirurgia_ogolna" name="Chirurgia ogolna"/>
+  </specializations>
+  <visit_types>
+    <visit_type id="stacjonarna" name="Wizyta stacjonarna"/>
+    <visit_type id="online" name="Wizyta online"/>
+  </visit_types>
+  <insurance_types>
+    <insurance_type id="nfz" name="NFZ"/>
+    <insurance_type id="prywatne" name="Prywatne"/>
+    <insurance_type id="pakiet" name="Pakiet medyczny"/>
+  </insurance_types>
+  <booking_statuses>
+    <status id="pending" name="Oczekujaca"/>
+    <status id="confirmed" name="Potwierdzona"/>
+    <status id="cancelled" name="Anulowana"/>
+    <status id="completed" name="Zakonczona"/>
+    <status id="no_show" name="Nieobecnosc"/>
+  </booking_statuses>
+  <document_types>
+    <document_type id="prescription" name="Recepta"/>
+    <document_type id="referral" name="Skierowanie"/>
+    <document_type id="result" name="Wynik badania"/>
+    <document_type id="other" name="Inny dokument"/>
+  </document_types>
+</medbook>

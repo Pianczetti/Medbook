@@ -1,0 +1,16 @@
+Dostepny termin z listy oczekujacych - MedBook
+
+Szanowny/a {customer_name},
+
+Mamy dobre wiesci! Zwolnil sie termin, na ktory oczekujesz:
+
+Lekarz: {resource_name}
+Data: {available_date}
+Godzina: {available_time}
+
+Termin jest dostepny przez ograniczony czas. Prosimy o szybka rezerwacje.
+
+Aby zarezerwowac wizyte, zaloguj sie na swoje konto i przejdz do rezerwacji.
+
+Pozdrawiamy,
+Zespol MedBook

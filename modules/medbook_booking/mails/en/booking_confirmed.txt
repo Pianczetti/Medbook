@@ -1,0 +1,15 @@
+Booking Confirmed!
+==================
+
+Hello {customer_name},
+
+Your booking has been confirmed. Here are the details:
+
+Resource: {resource_name}
+Date: {booking_date}
+Time: {booking_time}
+
+We look forward to seeing you!
+
+---
+This is an automated confirmation. Please do not reply directly to this email.

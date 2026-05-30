@@ -1,0 +1,44 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Copy and rebrand the sellnetic_booking module as medbook_booking into PrestaShop's modules/ directory. Rename all namespaces from Sellnetic\\Booking to MedBook\\Booking, rename table prefixes from sellnetic_booking_ to medbook_, rename all class references, service IDs, route names, and the module main class. Lock resource_type default to 'doctor'. Update all text to Polish (pl-PL) where applicable.",
+  "status": "completed",
+  "steps": [
+    "Copy the entire /projects/sandbox/sellnetictheme/modules/sellnetic_booking/ directory to /projects/sandbox/PrestaShop/modules/medbook_booking/",
+    "Rename the main module file from sellnetic_booking.php to medbook_booking.php",
+    "Rename the main class from Sellnetic_booking to Medbook_booking (PS module class naming convention: filename without .php, with underscores)",
+    "Update the module constructor: name='medbook_booking', displayName='MedBook - Rezerwacja Wizyt', description='Platforma do rezerwacji wizyt lekarskich', version='1.0.0', author='MedBook'",
+    "Replace all PHP namespace references: Sellnetic\\Booking -> MedBook\\Booking throughout all src/ files",
+    "Update config/services.yml: change all Sellnetic\\Booking\\ references to MedBook\\Booking\\, update service IDs from sellnetic_booking.* to medbook_booking.*",
+    "Update config/admin/services.yml: same namespace and service ID replacements",
+    "Update config/routes.yml: rename all route names from admin_sellnetic_booking_* to admin_medbook_booking_*, update controller FQCNs, update _legacy_controller and _legacy_link values from AdminSellneticBooking* to AdminMedbookBooking*",
+    "Update sql/install.sql: rename all table names from PREFIX_sellnetic_booking_* to PREFIX_medbook_*, rename all index names from idx_sellnetic_booking_* to idx_medbook_*. Change resource_type default from 'service' to 'doctor'",
+    "Update sql/uninstall.sql with new table names (PREFIX_medbook_*)",
+    "Update sql/upgrade-*.sql files with new table names",
+    "Rename all Grid class references (GridDefinitionFactory, QueryBuilder, Filters) to use medbook_ table names and medbook_booking grid IDs",
+    "Update all Entity classes to reference medbook_ tables instead of sellnetic_booking_ tables",
+    "Update the getTabs() method in the main module class: rename all class_name values from AdminSellneticBooking* to AdminMedbookBooking*, update route_name values to admin_medbook_booking_*",
+    "Update views/templates/admin/ twig templates to reference new route names (admin_medbook_booking_*)",
+    "Update controllers/front/*.php controller class names from Sellnetic_bookingModuleFrontController derivatives to Medbook_bookingModuleFrontController pattern (or use appropriate PS9 naming)",
+    "Update composer.json in the module (if present) with new namespace autoload mapping",
+    "Update all hook references and translation domains: Modules.Sellneticbooking.* -> Modules.Medbookbooking.*",
+    "Add Polish translations for all admin labels in the module: Booking->Rezerwacje, Resources->Lekarze, Schedule->Harmonogram, Blocked Dates->Zablokowane Terminy, Price Rules->Reguly Cenowe, Add-ons->Dodatki, Settings->Ustawienia, Calendar->Kalendarz, Recurring->Wizyty Cykliczne, Waitlist->Lista Oczekujacych, Refund Rules->Reguly Zwrotow, Deposit Rules->Reguly Zaliczek"
+  ],
+  "acceptance_criteria": [
+    "Module directory exists at /projects/sandbox/PrestaShop/modules/medbook_booking/",
+    "No references to 'sellnetic' or 'Sellnetic' remain in any file within modules/medbook_booking/",
+    "All PHP files pass syntax check (php -l)",
+    "Module main class is properly named Medbook_booking in medbook_booking.php",
+    "All service IDs in services.yml use medbook_booking prefix",
+    "All route names in routes.yml use admin_medbook_booking_ prefix",
+    "SQL install creates tables with medbook_ prefix",
+    "resource_type default is 'doctor' in install.sql"
+  ],
+  "verification": [
+    "Run: find /projects/sandbox/PrestaShop/modules/medbook_booking/ -name '*.php' -exec php -l {} \\; | grep -v 'No syntax errors' to verify no PHP syntax errors",
+    "Run: grep -ri 'sellnetic' /projects/sandbox/PrestaShop/modules/medbook_booking/ to verify no old references remain",
+    "Run: grep \"resource_type.*DEFAULT.*doctor\" /projects/sandbox/PrestaShop/modules/medbook_booking/sql/install.sql to confirm doctor default"
+  ],
+  "blocked_reason": null,
+  "findings": "All 157 files copied and rebranded successfully. modules/* is in .gitignore so git add -f was needed. The uninstall.sql was also updated to include tables from the v1.2.0 upgrade (waitlist, suggested_visit, recurrence_config, reminder, confirm_token) that were missing from the original. PHP syntax check passed on all files. No sellnetic/Sellnetic references remain."
+}

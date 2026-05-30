@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity_medbook_specialization>
+  <fields id="name">
+    <field name="name"/>
+    <field name="slug"/>
+    <field name="icon"/>
+    <field name="is_active"/>
+    <field name="position"/>
+  </fields>
+  <entities>
+    <medbook_specialization id="kardiologia" is_active="1" position="0">
+      <name>Kardiologia</name>
+      <slug>kardiologia</slug>
+      <icon>fa-heartbeat</icon>
+    </medbook_specialization>
+    <medbook_specialization id="dermatologia" is_active="1" position="1">
+      <name>Dermatologia</name>
+      <slug>dermatologia</slug>
+      <icon>fa-hand-paper</icon>
+    </medbook_specialization>
+    <medbook_specialization id="endokrynologia" is_active="1" position="2">
+      <name>Endokrynologia</name>
+      <slug>endokrynologia</slug>
+      <icon>fa-flask</icon>
+    </medbook_specialization>
+    <medbook_specialization id="gastroenterologia" is_active="1" position="3">
+      <name>Gastroenterologia</name>
+      <slug>gastroenterologia</slug>
+      <icon>fa-medkit</icon>
+    </medbook_specialization>
+    <medbook_specialization id="ginekologia" is_active="1" position="4">
+      <name>Ginekologia</name>
+      <slug>ginekologia</slug>
+      <icon>fa-female</icon>
+    </medbook_specialization>
+    <medbook_specialization id="neurologia" is_active="1" position="5">
+      <name>Neurologia</name>
+      <slug>neurologia</slug>
+      <icon>fa-brain</icon>
+    </medbook_specialization>
+    <medbook_specialization id="okulistyka" is_active="1" position="6">
+      <name>Okulistyka</name>
+      <slug>okulistyka</slug>
+      <icon>fa-eye</icon>
+    </medbook_specialization>
+    <medbook_specialization id="ortopedia" is_active="1" position="7">
+      <name>Ortopedia</name>
+      <slug>ortopedia</slug>
+      <icon>fa-bone</icon>
+    </medbook_specialization>
+    <medbook_specialization id="pediatria" is_active="1" position="8">
+      <name>Pediatria</name>
+      <slug>pediatria</slug>
+      <icon>fa-child</icon>
+    </medbook_specialization>
+    <medbook_specialization id="psychiatria" is_active="1" position="9">
+      <name>Psychiatria</name>
+      <slug>psychiatria</slug>
+      <icon>fa-comments</icon>
+    </medbook_specialization>
+    <medbook_specialization id="pulmonologia" is_active="1" position="10">
+      <name>Pulmonologia</name>
+      <slug>pulmonologia</slug>
+      <icon>fa-lungs</icon>
+    </medbook_specialization>
+    <medbook_specialization id="radiologia" is_active="1" position="11">
+      <name>Radiologia</name>
+      <slug>radiologia</slug>
+      <icon>fa-x-ray</icon>
+    </medbook_specialization>
+    <medbook_specialization id="reumatologia" is_active="1" position="12">
+      <name>Reumatologia</name>
+      <slug>reumatologia</slug>
+      <icon>fa-hand-holding-medical</icon>
+    </medbook_specialization>
+    <medbook_specialization id="urologia" is_active="1" position="13">
+      <name>Urologia</name>
+      <slug>urologia</slug>
+      <icon>fa-procedures</icon>
+    </medbook_specialization>
+    <medbook_specialization id="stomatologia" is_active="1" position="14">
+      <name>Stomatologia</name>
+      <slug>stomatologia</slug>
+      <icon>fa-tooth</icon>
+    </medbook_specialization>
+    <medbook_specialization id="laryngologia" is_active="1" position="15">
+      <name>Laryngologia</name>
+      <slug>laryngologia</slug>
+      <icon>fa-head-side-cough</icon>
+    </medbook_specialization>
+    <medbook_specialization id="alergologia" is_active="1" position="16">
+      <name>Alergologia</name>
+      <slug>alergologia</slug>
+      <icon>fa-allergies</icon>
+    </medbook_specialization>
+    <medbook_specialization id="onkologia" is_active="1" position="17">
+      <name>Onkologia</name>
+      <slug>onkologia</slug>
+      <icon>fa-ribbon</icon>
+    </medbook_specialization>
+    <medbook_specialization id="medycyna_rodzinna" is_active="1" position="18">
+      <name>Medycyna rodzinna</name>
+      <slug>medycyna-rodzinna</slug>
+      <icon>fa-home</icon>
+    </medbook_specialization>
+    <medbook_specialization id="chirurgia_ogolna" is_active="1" position="19">
+      <name>Chirurgia ogolna</name>
+      <slug>chirurgia-ogolna</slug>
+      <icon>fa-cut</icon>
+    </medbook_specialization>
+  </entities>
+</entity_medbook_specialization>

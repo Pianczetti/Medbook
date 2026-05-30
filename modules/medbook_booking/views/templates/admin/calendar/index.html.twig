@@ -1,0 +1,93 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="calendar-resource" class="form-label">{{ 'Resource'|trans({}, 'Modules.Medbookbooking.Admin') }}</label>
+      <select id="calendar-resource" class="form-select">
+        <option value="0"{% if selectedResourceId == 0 %} selected{% endif %}>{{ 'All resources'|trans({}, 'Modules.Medbookbooking.Admin') }}</option>
+        {% for resource in resources %}
+          <option value="{{ resource.id_resource }}"{% if selectedResourceId == resource.id_resource %} selected{% endif %}>{{ resource.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="calendar-date" class="form-label">{{ 'Date'|trans({}, 'Admin.Global') }}</label>
+      <input type="date" id="calendar-date" class="form-control" value="{{ selectedDate }}">
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button id="calendar-reload" class="btn btn-primary">{{ 'Load'|trans({}, 'Admin.Global') }}</button>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="{{ asset('modules/medbook_booking/views/css/admin-calendar.css') }}">
+
+  <div class="calendar-timeline" id="calendar-timeline">
+    <div class="calendar-time-axis">
+      {% for hour in 8..19 %}
+        <div class="calendar-time-slot">{{ '%02d'|format(hour) }}:00</div>
+        <div class="calendar-time-slot">{{ '%02d'|format(hour) }}:30</div>
+      {% endfor %}
+    </div>
+    <div class="calendar-bookings" id="calendar-bookings">
+      {% for hour in 8..19 %}
+        <div class="calendar-grid-line"></div>
+        <div class="calendar-grid-line"></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var dataUrl = '{{ path('admin_medbook_booking_calendar_data') }}';
+      var createUrl = '{{ path('admin_medbook_booking_booking_create') }}';
+      var editBaseUrl = '{{ path('admin_medbook_booking_booking_edit', {bookingId: 0}) }}'.replace('/0/', '/{id}/');
+
+      function loadBookings() {
+        var date = document.getElementById('calendar-date').value;
+        var resourceId = document.getElementById('calendar-resource').value;
+        var url = dataUrl + '?date=' + encodeURIComponent(date) + '&resource_id=' + encodeURIComponent(resourceId);
+
+        fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+          .then(function(r) { return r.json(); })
+          .then(function(bookings) { renderBookings(bookings); });
+      }
+
+      function renderBookings(bookings) {
+        var container = document.getElementById('calendar-bookings');
+        container.querySelectorAll('.calendar-booking-block').forEach(function(el) { el.remove(); });
+
+        bookings.forEach(function(b) {
+          var startMin = timeToMinutes(b.time_start) - 480;
+          var endMin = timeToMinutes(b.time_end) - 480;
+          if (startMin < 0) startMin = 0;
+          if (endMin > 720) endMin = 720;
+
+          var block = document.createElement('a');
+          block.className = 'calendar-booking-block';
+          block.href = editBaseUrl.replace('{id}', b.id);
+          block.style.top = (startMin / 720 * 100) + '%';
+          block.style.height = ((endMin - startMin) / 720 * 100) + '%';
+          block.style.backgroundColor = b.color;
+          block.title = b.customer_name + ' (' + b.time_start + ' - ' + b.time_end + ')';
+          block.textContent = b.customer_name;
+          container.appendChild(block);
+        });
+      }
+
+      function timeToMinutes(t) {
+        var parts = t.split(':');
+        return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+      }
+
+      document.getElementById('calendar-reload').addEventListener('click', function() { loadBookings(); });
+      document.getElementById('calendar-bookings').addEventListener('click', function(e) {
+        if (e.target === this) {
+          window.location.href = createUrl;
+        }
+      });
+
+      loadBookings();
+    })();
+  </script>
+{% endblock %}

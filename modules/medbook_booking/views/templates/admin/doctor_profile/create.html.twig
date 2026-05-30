@@ -1,0 +1,24 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-header-title">{{ 'Nowy profil lekarza'|trans({}, 'Modules.Medbookbooking.Admin') }}</h3>
+        </div>
+        <div class="card-body">
+          {{ form_start(doctorProfileForm) }}
+            {{ form_widget(doctorProfileForm) }}
+            <button type="submit" class="btn btn-primary">
+              {{ 'Save'|trans({}, 'Admin.Actions') }}
+            </button>
+            <a href="{{ path('admin_medbook_booking_doctor_profile_index') }}" class="btn btn-outline-secondary">
+              {{ 'Cancel'|trans({}, 'Admin.Actions') }}
+            </a>
+          {{ form_end(doctorProfileForm) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

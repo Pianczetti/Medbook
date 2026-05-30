@@ -43,7 +43,7 @@ class Datas
             'help' => 'all / database,fixtures,theme,modules,postInstall',
         ],
         'language' => [
-            'default' => 'en',
+            'default' => 'pl',
             'validate' => 'isLanguageIsoCode',
             'alias' => 'l',
             'help' => 'language iso code',
@@ -55,7 +55,7 @@ class Datas
             'help' => 'install all available languages',
         ],
         'timezone' => [
-            'default' => 'Europe/Paris',
+            'default' => 'Europe/Warsaw',
             'alias' => 't',
         ],
         'base_uri' => [
@@ -116,12 +116,12 @@ class Datas
         'shop_name' => [
             'name' => 'name',
             'validate' => 'isGenericName',
-            'default' => 'PrestaShop',
+            'default' => 'MedBook',
         ],
         'shop_country' => [
             'name' => 'country',
             'validate' => 'isLanguageIsoCode',
-            'default' => 'fr',
+            'default' => 'pl',
         ],
         'admin_firstname' => [
             'name' => 'firstname',
@@ -168,8 +168,8 @@ class Datas
             'help' => 'enable fixtures installation',
         ],
         'modules' => [
-            'default' => [],
-            'help' => 'Modules to install, separated by comma',
+            'default' => ['medbook_booking'],
+            'help' => 'Modules to install, separated by comma. medbook_booking is always included.',
         ],
     ];
 

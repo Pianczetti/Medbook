@@ -1,0 +1,17 @@
+Przypomnienie o wizycie - MedBook
+
+Szanowny/a {customer_name},
+
+Przypominamy o zblizajacej sie wizycie lekarskiej:
+
+Lekarz: {resource_name}
+Data: {booking_date}
+Godzina: {booking_time}
+Typ wizyty: {visit_type}
+
+Jezeli nie mozesz stawic sie na wizyte, prosimy o odwolanie rezerwacji z odpowiednim wyprzedzeniem.
+
+Pamietaj o zabraniu dokumentu tozsamosci oraz wynikow badan (jezeli dotyczy).
+
+Pozdrawiamy,
+Zespol MedBook
